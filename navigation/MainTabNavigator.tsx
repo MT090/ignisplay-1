@@ -1,7 +1,7 @@
 import { Colors, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import HomeStackNavigator from "@/navigation/HomeStackNavigator";
-import DownloadsScreen from "@/screens/DownloadsScreen";
+import MyListScreen from "@/screens/MyListScreen";
 import ProfileScreen from "@/screens/ProfileScreen";
 import SearchScreen from "@/screens/SearchScreen";
 import { Feather } from "@expo/vector-icons";
@@ -14,7 +14,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export type MainTabParamList = {
   HomeTab: undefined;
   SearchTab: undefined;
-  DownloadsTab: undefined;
+  MyListTab: undefined;
   ProfileTab: undefined;
 };
 
@@ -82,12 +82,12 @@ export default function MainTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="DownloadsTab"
-        component={DownloadsScreen}
+        name="MyListTab"
+        component={MyListScreen}
         options={{
-          title: "Downloads",
+          title: "My List",
           tabBarIcon: ({ color, size }) => (
-            <Feather name="download" size={24} color={color} />
+            <Feather name="bookmark" size={24} color={color} />
           ),
         }}
       />
