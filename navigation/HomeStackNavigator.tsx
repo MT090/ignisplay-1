@@ -12,7 +12,7 @@ import React from "react";
 
 export type HomeStackParamList = {
   Home: undefined;
-  Detail: { 
+  Detail: {
     id: string;
     title: string;
     posterUrl: string;
@@ -28,9 +28,9 @@ const Stack = createNativeStackNavigator<HomeStackParamList>();
 
 function HomeScreenWithHeader() {
   const navigation = useNavigation<BottomTabNavigationProp<MainTabParamList>>();
-  
+
   return (
-    <HeaderActions 
+    <HeaderActions
       onSearchPress={() => navigation.navigate("SearchTab")}
       onProfilePress={() => navigation.navigate("ProfileTab")}
     />
@@ -64,7 +64,7 @@ export default function HomeStackNavigator() {
       <Stack.Screen
         name="Detail"
         component={DetailScreen}
-        options={{ 
+        options={{
           headerTitle: "",
           headerTransparent: true,
           headerTintColor: Colors.dark.text,

@@ -1,8 +1,10 @@
 import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Colors, Spacing } from "@/constants/theme";
 import type { HomeStackParamList } from "@/navigation/HomeStackNavigator";
+import type { RootStackParamList } from "@/navigation/RootNavigator";
 import { Feather } from "@expo/vector-icons";
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import {
@@ -107,7 +109,12 @@ function SimilarCard({ movie, onPress }: { movie: SimilarMovie; onPress: () => v
 export default function DetailScreen({ route }: DetailScreenProps) {
   const { title, posterUrl, description, year, rating, duration, type } = route.params;
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [isBookmarked, setIsBookmarked] = useState(false);
+
+  const handlePlayVideo = () => {
+    navigation.navigate("VideoPlayer", { title });
+  };
 
   return (
     <ScrollView
@@ -179,6 +186,7 @@ export default function DetailScreen({ route }: DetailScreenProps) {
 
         <View style={styles.actionButtons}>
           <Pressable
+            onPress={handlePlayVideo}
             style={({ pressed }) => [
               styles.playButton,
               { opacity: pressed ? 0.9 : 1 }
@@ -202,7 +210,7 @@ export default function DetailScreen({ route }: DetailScreenProps) {
       {/* Watch Trailer Section */}
       <View style={styles.trailerSection}>
         <ThemedText type="h4" style={styles.sectionTitle}>Watch Trailer</ThemedText>
-        <Pressable style={styles.trailerContainer}>
+        <Pressable onPress={handlePlayVideo} style={styles.trailerContainer}>
           <LinearGradient
             colors={["rgba(173, 43, 238, 0.1)", "rgba(173, 43, 238, 0.3)"]}
             start={{ x: 0, y: 0 }}
