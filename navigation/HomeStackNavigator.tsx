@@ -1,14 +1,14 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "@/screens/HomeScreen";
-import DetailScreen from "@/screens/DetailScreen";
-import { HeaderTitle, HeaderActions } from "@/components/HeaderTitle";
-import { useTheme } from "@/hooks/useTheme";
-import { getCommonScreenOptions } from "@/navigation/screenOptions";
+import { HeaderActions, HeaderTitle } from "@/components/HeaderTitle";
 import { Colors } from "@/constants/theme";
-import { useNavigation } from "@react-navigation/native";
-import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { useTheme } from "@/hooks/useTheme";
 import type { MainTabParamList } from "@/navigation/MainTabNavigator";
+import { getCommonScreenOptions } from "@/navigation/screenOptions";
+import DetailScreen from "@/screens/DetailScreen";
+import HomeScreen from "@/screens/HomeScreen";
+import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from "react";
 
 export type HomeStackParamList = {
   Home: undefined;

@@ -1,20 +1,20 @@
+import { ThemedText } from "@/components/ThemedText";
+import { BorderRadius, Colors, Spacing } from "@/constants/theme";
+import type { HomeStackParamList } from "@/navigation/HomeStackNavigator";
+import { Feather } from "@expo/vector-icons";
+import { RouteProp } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
-import { 
-  StyleSheet, 
-  View, 
-  ScrollView, 
-  Image, 
-  Pressable, 
+import {
   Dimensions,
   FlatList,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { RouteProp } from "@react-navigation/native";
-import { ThemedText } from "@/components/ThemedText";
-import { Colors, Spacing, BorderRadius } from "@/constants/theme";
-import type { HomeStackParamList } from "@/navigation/HomeStackNavigator";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -134,10 +134,10 @@ export default function DetailScreen({ route }: DetailScreenProps) {
               { opacity: pressed ? 0.7 : 1 }
             ]}
           >
-            <Feather 
-              name={isBookmarked ? "bookmark" : "bookmark"} 
-              size={24} 
-              color={isBookmarked ? Colors.dark.primary : Colors.dark.text} 
+            <Feather
+              name={isBookmarked ? "bookmark" : "bookmark"}
+              size={24}
+              color={isBookmarked ? Colors.dark.primary : Colors.dark.text}
             />
           </Pressable>
         </View>
@@ -145,7 +145,7 @@ export default function DetailScreen({ route }: DetailScreenProps) {
 
       <View style={styles.contentSection}>
         <ThemedText type="h1" style={styles.title}>{title}</ThemedText>
-        
+
         <View style={styles.metadata}>
           {year ? (
             <View style={styles.metaItem}>
@@ -199,6 +199,28 @@ export default function DetailScreen({ route }: DetailScreenProps) {
         </View>
       </View>
 
+      {/* Watch Trailer Section */}
+      <View style={styles.trailerSection}>
+        <ThemedText type="h4" style={styles.sectionTitle}>Watch Trailer</ThemedText>
+        <Pressable style={styles.trailerContainer}>
+          <LinearGradient
+            colors={["rgba(173, 43, 238, 0.1)", "rgba(173, 43, 238, 0.3)"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.trailerThumbnail}
+          >
+            <View style={styles.playButtonContainer}>
+              <LinearGradient
+                colors={["rgba(255, 255, 255, 0.15)", "rgba(255, 255, 255, 0.05)"]}
+                style={styles.trailerPlayButton}
+              >
+                <Feather name="play" size={24} color={Colors.dark.text} />
+              </LinearGradient>
+            </View>
+          </LinearGradient>
+        </Pressable>
+      </View>
+
       <View style={styles.section}>
         <ThemedText type="h4" style={styles.sectionTitle}>Cast & Crew</ThemedText>
         <FlatList
@@ -217,7 +239,7 @@ export default function DetailScreen({ route }: DetailScreenProps) {
         <FlatList
           data={SIMILAR_MOVIES}
           renderItem={({ item }) => (
-            <SimilarCard movie={item} onPress={() => {}} />
+            <SimilarCard movie={item} onPress={() => { }} />
           )}
           keyExtractor={(item) => item.id}
           horizontal
@@ -331,6 +353,36 @@ const styles = StyleSheet.create({
   downloadButtonText: {
     color: Colors.dark.text,
     fontWeight: "600",
+  },
+  trailerSection: {
+    marginTop: Spacing.xl,
+    paddingHorizontal: Spacing.lg,
+  },
+  trailerContainer: {
+    width: "100%",
+    height: 180,
+    borderRadius: BorderRadius.md,
+    overflow: "hidden",
+  },
+  trailerThumbnail: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  playButtonContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    overflow: "hidden",
+  },
+  trailerPlayButton: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "rgba(255, 255, 255, 0.3)",
   },
   section: {
     marginTop: Spacing.xl,

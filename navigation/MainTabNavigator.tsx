@@ -45,7 +45,6 @@ export default function MainTabNavigator() {
           borderTopLeftRadius: 16,
           borderTopRightRadius: 16,
           marginBottom: Platform.OS === 'android' ? -Spacing.sm : 0,
-          paddingTop: Spacing.sm,
         },
         tabBarBackground: () =>
           Platform.OS === "ios" ? (
