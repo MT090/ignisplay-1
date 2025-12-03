@@ -1,13 +1,14 @@
-import React from "react";
-import { 
-  StyleSheet, 
-  View, 
-  ScrollView, 
-  Image, 
-  Pressable, 
+import React, { useState, useEffect, useRef } from "react";
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Image,
+  Pressable,
   Dimensions,
   FlatList,
   ImageBackground,
+  Animated,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Feather } from "@expo/vector-icons";
@@ -16,6 +17,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ThemedText } from "@/components/ThemedText";
 import { Colors, Spacing, BorderRadius } from "@/constants/theme";
 import type { HomeStackParamList } from "@/navigation/HomeStackNavigator";
+import { Movie, getTopMovies } from "@/src/utils/movieUtils";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -23,30 +25,7 @@ type HomeScreenProps = {
   navigation: NativeStackNavigationProp<HomeStackParamList, "Home">;
 };
 
-interface Movie {
-  id: string;
-  title: string;
-  posterUrl: string;
-  backdropUrl?: string;
-  description?: string;
-  year?: string;
-  rating?: string;
-  duration?: string;
-  progress?: number;
-  type?: "movie" | "series";
-}
 
-const FEATURED_MOVIE: Movie = {
-  id: "featured-1",
-  title: "Blade Runner 2049",
-  posterUrl: "https://image.tmdb.org/t/p/w780/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg",
-  backdropUrl: "https://image.tmdb.org/t/p/w1280/ilRyazdMJwN05exqhwK4tMKBYZs.jpg",
-  description: "Thirty years after the events of the first film, a new blade runner unearths a long-buried secret that has the potential to plunge what's left of society into chaos.",
-  year: "2017",
-  rating: "8.0",
-  duration: "2h 44min",
-  type: "movie",
-};
 
 const TRENDING_MOVIES: Movie[] = [
   {
@@ -284,6 +263,92 @@ function SectionHeader({ title }: SectionHeaderProps) {
 export default function HomeScreen({ navigation }: HomeScreenProps) {
   const insets = useSafeAreaInsets();
 
+  const [topMovies, setTopMovies] = useState<Movie[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const flatRef = useRef<FlatList>(null);
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      const movies = await getTopMovies();
+      setTopMovies(movies);
+      // Preload images
+      movies.forEach(movie => {
+        if (movie.backdropUrl) Image.prefetch(movie.backdropUrl);
+        if (movie.posterUrl) Image.prefetch(movie.posterUrl);
+      });
+    };
+    fetchMovies();
+  }, []);
+
+  useEffect(() => {
+    if (topMovies.length === 0) return;
+    const interval = setInterval(() => {
+      const nextIdx = (currentIndex + 1) % topMovies.length;
+      const targetIndex = nextIdx === 0 ? topMovies.length : nextIdx;
+      flatRef.current?.scrollToIndex({ index: targetIndex, animated: true });
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [topMovies, currentIndex]);
+
+  const carouselData = [...topMovies, ...topMovies];
+
+  const featuredMovie = topMovies[currentIndex] || {
+    id: "default",
+    title: "Loading...",
+    posterUrl: "",
+    backdropUrl: "",
+    description: "",
+    year: "",
+    rating: "",
+    duration: "",
+    type: "movie" as const,
+  };
+
+  const renderBanner = (movie: Movie) => (
+    <ImageBackground
+      source={{ uri: movie.backdropUrl }}
+      style={styles.heroBanner}
+      resizeMode="cover"
+    >
+      <LinearGradient
+        colors={["transparent", "rgba(28, 16, 34, 0.5)", "rgba(28, 16, 34, 0.95)"]}
+        locations={[0, 0.5, 1]}
+        style={styles.heroGradient}
+      />
+      <View style={styles.heroContent}>
+        <ThemedText type="h1" style={styles.heroTitle}>
+          {movie.title}
+        </ThemedText>
+        <ThemedText type="small" style={styles.heroDescription} numberOfLines={3}>
+          {movie.description}
+        </ThemedText>
+        <View style={styles.heroButtons}>
+          <Pressable
+            onPress={() => navigateToDetail(movie)}
+            style={({ pressed }) => [
+              styles.playButtonLarge,
+              { opacity: pressed ? 0.9 : 1 }
+            ]}
+          >
+            <Feather name="play" size={20} color={Colors.dark.text} />
+            <ThemedText type="body" style={styles.buttonText}>Play</ThemedText>
+          </Pressable>
+          <Pressable
+            onPress={() => navigateToDetail(movie)}
+            style={({ pressed }) => [
+              styles.moreInfoButton,
+              { opacity: pressed ? 0.8 : 1 }
+            ]}
+          >
+            <Feather name="info" size={20} color={Colors.dark.text} />
+            <ThemedText type="body" style={styles.buttonText}>More Info</ThemedText>
+          </Pressable>
+        </View>
+      </View>
+    </ImageBackground>
+  );
+
   const navigateToDetail = (movie: Movie) => {
     navigation.navigate("Detail", {
       id: movie.id,
@@ -324,52 +389,37 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       contentContainerStyle={[styles.contentContainer, { paddingBottom: 100 + insets.bottom }]}
       showsVerticalScrollIndicator={false}
     >
-      <Pressable
-        onPress={() => navigateToDetail(FEATURED_MOVIE)}
-        style={({ pressed }) => [{ opacity: pressed ? 0.95 : 1 }]}
-      >
-        <ImageBackground
-          source={{ uri: FEATURED_MOVIE.backdropUrl }}
-          style={styles.heroBanner}
-          resizeMode="cover"
-        >
-          <LinearGradient
-            colors={["transparent", "rgba(28, 16, 34, 0.5)", "rgba(28, 16, 34, 0.95)"]}
-            locations={[0, 0.5, 1]}
-            style={styles.heroGradient}
-          />
-          <View style={styles.heroContent}>
-            <ThemedText type="h1" style={styles.heroTitle}>
-              {FEATURED_MOVIE.title}
-            </ThemedText>
-            <ThemedText type="small" style={styles.heroDescription} numberOfLines={3}>
-              {FEATURED_MOVIE.description}
-            </ThemedText>
-            <View style={styles.heroButtons}>
+      <View style={styles.heroContainer}>
+        <FlatList
+          ref={flatRef}
+          data={carouselData}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item, index }) => (
+            <View style={{ width: SCREEN_WIDTH }}>
               <Pressable
-                onPress={() => navigateToDetail(FEATURED_MOVIE)}
-                style={({ pressed }) => [
-                  styles.playButtonLarge,
-                  { opacity: pressed ? 0.9 : 1 }
-                ]}
+                onPress={() => navigateToDetail(item)}
+                style={({ pressed }) => [{ opacity: pressed ? 0.95 : 1 }]}
               >
-                <Feather name="play" size={20} color={Colors.dark.text} />
-                <ThemedText type="body" style={styles.buttonText}>Play</ThemedText>
-              </Pressable>
-              <Pressable
-                onPress={() => navigateToDetail(FEATURED_MOVIE)}
-                style={({ pressed }) => [
-                  styles.moreInfoButton,
-                  { opacity: pressed ? 0.8 : 1 }
-                ]}
-              >
-                <Feather name="info" size={20} color={Colors.dark.text} />
-                <ThemedText type="body" style={styles.buttonText}>More Info</ThemedText>
+                {renderBanner(item)}
               </Pressable>
             </View>
-          </View>
-        </ImageBackground>
-      </Pressable>
+          )}
+          keyExtractor={(item, index) => `${item.id}-${index}`}
+          onMomentumScrollEnd={(event) => {
+            const page = Math.round(event.nativeEvent.contentOffset.x / SCREEN_WIDTH);
+            if (page >= topMovies.length) {
+              flatRef.current?.scrollToIndex({ index: 0, animated: false });
+              setCurrentIndex(0);
+            } else {
+              setCurrentIndex(page);
+            }
+          }}
+          getItemLayout={(data, index) => ({ length: SCREEN_WIDTH, offset: SCREEN_WIDTH * index, index })}
+          initialScrollIndex={0}
+        />
+      </View>
 
       <SectionHeader title="Trending Now" />
       <FlatList
@@ -414,6 +464,11 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingTop: 0,
+  },
+  heroContainer: {
+    width: SCREEN_WIDTH,
+    height: 480,
+    overflow: 'hidden',
   },
   heroBanner: {
     width: SCREEN_WIDTH,
