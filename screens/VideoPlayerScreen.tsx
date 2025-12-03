@@ -43,8 +43,8 @@ export default function VideoPlayerScreen() {
     });
 
     useEffect(() => {
-        const subscription = player.addListener('playingChange', (isPlaying) => {
-            setIsPlaying(isPlaying);
+        const subscription = player.addListener('playingChange', (payload) => {
+            setIsPlaying(payload.isPlaying);
         });
 
         return () => {
@@ -150,7 +150,7 @@ export default function VideoPlayerScreen() {
                 <VideoView
                     style={styles.video}
                     player={player}
-                    allowsFullscreen
+                    fullscreenOptions={{ enable: true }}
                     allowsPictureInPicture
                     nativeControls={false}
                 />

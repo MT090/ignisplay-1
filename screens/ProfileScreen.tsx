@@ -65,18 +65,12 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      <View style={styles.section}>
-        <ThemedText type="small" style={styles.sectionTitle}>My List</ThemedText>
-        <SettingItem icon="heart" title="My Favorites" onPress={() => {}} />
-        <SettingItem icon="clock" title="Watch History" onPress={() => {}} />
-      </View>
 
       <View style={styles.section}>
         <ThemedText type="small" style={styles.sectionTitle}>Settings</ThemedText>
         <SettingItem icon="user" title="Account" onPress={() => {}} />
         <SettingItem icon="bell" title="Notifications" onPress={() => {}} />
         <SettingItem icon="play-circle" title="Playback" onPress={() => {}} />
-        <SettingItem icon="download" title="Downloads" onPress={() => {}} />
       </View>
 
       <View style={styles.section}>
