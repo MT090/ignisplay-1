@@ -1,9 +1,14 @@
-import React from "react";
-import { StyleSheet, View, Pressable, ScrollView } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemedText } from "@/components/ThemedText";
-import { Colors, Spacing, BorderRadius } from "@/constants/theme";
+import { BorderRadius, Colors, Spacing } from "@/constants/theme";
+import { ProfileStackParamList } from "@/types/navigation";
+import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from "react";
+import { Alert, Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+type ProfileScreenNavigationProp = NativeStackNavigationProp<ProfileStackParamList, 'Profile'>;
 
 interface SettingItemProps {
   icon: keyof typeof Feather.glyphMap;
@@ -46,6 +51,48 @@ function SettingItem({ icon, title, onPress, showArrow = true, destructive = fal
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<ProfileScreenNavigationProp>();
+
+  const handleAccount = () => {
+    navigation.navigate('Account');
+  };
+
+  const handleNotifications = () => {
+    navigation.navigate('Notifications');
+  };
+
+  const handlePlayback = () => {
+    navigation.navigate('Playback');
+  };
+
+  const handleHelpCenter = () => {
+    navigation.navigate('HelpCenter');
+  };
+
+  const handleAbout = () => {
+    navigation.navigate('About');
+  };
+
+  const handleLogout = () => {
+    Alert.alert(
+      "Log Out",
+      "Are you sure you want to log out?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Log Out",
+          style: "destructive",
+          onPress: () => {
+            // In a real app, you would clear user data and navigate to login
+            Alert.alert("Logged Out", "You have been successfully logged out.");
+          }
+        }
+      ]
+    );
+  };
 
   return (
     <ScrollView 
@@ -68,22 +115,22 @@ export default function ProfileScreen() {
 
       <View style={styles.section}>
         <ThemedText type="small" style={styles.sectionTitle}>Settings</ThemedText>
-        <SettingItem icon="user" title="Account" onPress={() => {}} />
-        <SettingItem icon="bell" title="Notifications" onPress={() => {}} />
-        <SettingItem icon="play-circle" title="Playback" onPress={() => {}} />
+        <SettingItem icon="user" title="Account" onPress={handleAccount} />
+        <SettingItem icon="bell" title="Notifications" onPress={handleNotifications} />
+        <SettingItem icon="play-circle" title="Playback" onPress={handlePlayback} />
       </View>
 
       <View style={styles.section}>
         <ThemedText type="small" style={styles.sectionTitle}>Support</ThemedText>
-        <SettingItem icon="help-circle" title="Help Center" onPress={() => {}} />
-        <SettingItem icon="info" title="About" onPress={() => {}} />
+        <SettingItem icon="help-circle" title="Help Center" onPress={handleHelpCenter} />
+        <SettingItem icon="info" title="About" onPress={handleAbout} />
       </View>
 
       <View style={[styles.section, { marginBottom: 120 }]}>
         <SettingItem 
           icon="log-out" 
           title="Log Out" 
-          onPress={() => {}} 
+          onPress={handleLogout} 
           showArrow={false}
           destructive
         />

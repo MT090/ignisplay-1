@@ -1,9 +1,10 @@
 import { Colors, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import HomeStackNavigator from "@/navigation/HomeStackNavigator";
+import ProfileStackNavigator from "@/navigation/ProfileStackNavigator";
 import MyListScreen from "@/screens/MyListScreen";
-import ProfileScreen from "@/screens/ProfileScreen";
 import SearchScreen from "@/screens/SearchScreen";
+import { MainTabParamList } from "@/types/navigation";
 import { Feather } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
@@ -11,12 +12,6 @@ import React from "react";
 import { Platform, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-export type MainTabParamList = {
-  HomeTab: undefined;
-  SearchTab: undefined;
-  MyListTab: undefined;
-  ProfileTab: undefined;
-};
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
@@ -93,7 +88,7 @@ export default function MainTabNavigator() {
       />
       <Tab.Screen
         name="ProfileTab"
-        component={ProfileScreen}
+        component={ProfileStackNavigator}
         options={{
           title: "Profile",
           tabBarIcon: ({ color, size }) => (
