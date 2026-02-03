@@ -38,8 +38,7 @@
           }
         }
       ],
-      "expo-web-browser",
-      "expo-video"
+      "expo-web-browser"
     ],
     "experiments": {
       "reactCompiler": true

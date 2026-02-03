@@ -5,26 +5,11 @@ import { getCommonScreenOptions } from "@/navigation/screenOptions";
 import BrowseScreen from "@/screens/BrowseScreen";
 import DetailScreen from "@/screens/DetailScreen";
 import HomeScreen from "@/screens/HomeScreen";
-import type { MainTabParamList } from "@/types/navigation";
+import type { HomeStackParamList, MainTabParamList } from "@/types/navigation";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-
-export type HomeStackParamList = {
-  Home: undefined;
-  Browse: undefined;
-  Detail: {
-    id: string;
-    title: string;
-    posterUrl: string;
-    description: string;
-    year?: string;
-    rating?: string;
-    duration?: string;
-    type?: "movie" | "series";
-  };
-};
 
 const Stack = createNativeStackNavigator<HomeStackParamList>();
 

@@ -3,6 +3,8 @@ export type RootStackParamList = {
   VideoPlayer: {
     videoUrl?: string;
     title?: string;
+    id?: string;
+    type?: "movie" | "series";
   };
   Account: undefined;
   Notifications: undefined;
@@ -20,7 +22,17 @@ export type MainTabParamList = {
 
 export type HomeStackParamList = {
   Home: undefined;
-  // Add other home stack screens if needed
+  Browse: undefined;
+  Detail: {
+    id: string;
+    title: string;
+    posterUrl: string;
+    description: string;
+    year?: string;
+    rating?: string;
+    duration?: string;
+    type?: "movie" | "series";
+  };
 };
 
 export type ProfileStackParamList = {

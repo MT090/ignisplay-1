@@ -1,15 +1,8 @@
 import MainTabNavigator from "@/navigation/MainTabNavigator";
 import VideoPlayerScreen from "@/screens/VideoPlayerScreen";
+import { RootStackParamList } from "@/types/navigation";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-
-export type RootStackParamList = {
-    MainTabs: undefined;
-    VideoPlayer: {
-        videoUrl?: string;
-        title?: string;
-    };
-};
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

@@ -1,7 +1,6 @@
 import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Colors, Spacing } from "@/constants/theme";
-import type { HomeStackParamList } from "@/navigation/HomeStackNavigator";
-import type { RootStackParamList } from "@/navigation/RootNavigator";
+import type { HomeStackParamList, RootStackParamList } from "@/types/navigation";
 import { Feather } from "@expo/vector-icons";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -107,13 +106,13 @@ function SimilarCard({ movie, onPress }: { movie: SimilarMovie; onPress: () => v
 }
 
 export default function DetailScreen({ route }: DetailScreenProps) {
-  const { title, posterUrl, description, year, rating, duration, type } = route.params;
+  const { id, title, posterUrl, description, year, rating, duration, type } = route.params;
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   const handlePlayVideo = () => {
-    navigation.navigate("VideoPlayer", { title });
+    navigation.navigate("VideoPlayer", { title, id, type });
   };
 
   return (
