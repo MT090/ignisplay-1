@@ -5,7 +5,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "expo-module-scripts/tsconfig.base": ["./node_modules/expo/tsconfig.base.json"]
+      "expo-module-scripts/tsconfig.base": [
+        "./node_modules/expo/tsconfig.base.json"
+      ]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"]

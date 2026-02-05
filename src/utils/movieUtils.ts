@@ -1,4 +1,3 @@
-
 export interface Movie {
   id: string;
   title: string;
@@ -18,12 +17,11 @@ const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/w1280";
 
-
-
 // Helper function to handle API calls
-const fetchFromTMDB = async (endpoint: string, params: Record<string, string> = {}) => {
-
-
+const fetchFromTMDB = async (
+  endpoint: string,
+  params: Record<string, string> = {}
+) => {
   const queryParams = new URLSearchParams({
     api_key: API_KEY,
     language: "en-US",
@@ -31,7 +29,9 @@ const fetchFromTMDB = async (endpoint: string, params: Record<string, string> = 
   });
 
   try {
-    const response = await fetch(`${BASE_URL}${endpoint}?${queryParams.toString()}`);
+    const response = await fetch(
+      `${BASE_URL}${endpoint}?${queryParams.toString()}`
+    );
     if (!response.ok) {
       throw new Error(`TMDB API Error: ${response.status}`);
     }
@@ -62,17 +62,23 @@ const formatMovie = (item: any): Movie => {
 };
 
 export const getTopMovies = async (page: number = 1): Promise<Movie[]> => {
-  const data = await fetchFromTMDB("/movie/top_rated", { page: page.toString() });
+  const data = await fetchFromTMDB("/movie/top_rated", {
+    page: page.toString(),
+  });
   return (data.results || []).slice(0, 10).map(formatMovie);
 };
 
 export const getTrendingMovies = async (page: number = 1): Promise<Movie[]> => {
-  const data = await fetchFromTMDB("/trending/movie/week", { page: page.toString() });
+  const data = await fetchFromTMDB("/trending/movie/week", {
+    page: page.toString(),
+  });
   return (data.results || []).map(formatMovie);
 };
 
 export const getNewReleases = async (page: number = 1): Promise<Movie[]> => {
-  const data = await fetchFromTMDB("/movie/now_playing", { page: page.toString() });
+  const data = await fetchFromTMDB("/movie/now_playing", {
+    page: page.toString(),
+  });
   return (data.results || []).map(formatMovie);
 };
 
@@ -80,7 +86,7 @@ export const getNewReleases = async (page: number = 1): Promise<Movie[]> => {
 export const getDiscoverMovies = async (page: number = 1): Promise<Movie[]> => {
   const data = await fetchFromTMDB("/discover/movie", {
     sort_by: "popularity.desc",
-    page: page.toString()
+    page: page.toString(),
   });
   return (data.results || []).map(formatMovie);
 };
@@ -89,7 +95,7 @@ export const getActionMovies = async (page: number = 1): Promise<Movie[]> => {
   const data = await fetchFromTMDB("/discover/movie", {
     with_genres: "28", // Action
     sort_by: "popularity.desc",
-    page: page.toString()
+    page: page.toString(),
   });
   return (data.results || []).map(formatMovie);
 };
@@ -98,7 +104,7 @@ export const getComedyMovies = async (page: number = 1): Promise<Movie[]> => {
   const data = await fetchFromTMDB("/discover/movie", {
     with_genres: "35", // Comedy
     sort_by: "popularity.desc",
-    page: page.toString()
+    page: page.toString(),
   });
   return (data.results || []).map(formatMovie);
 };
@@ -107,19 +113,24 @@ export const getDramaMovies = async (page: number = 1): Promise<Movie[]> => {
   const data = await fetchFromTMDB("/discover/movie", {
     with_genres: "18", // Drama
     sort_by: "popularity.desc",
-    page: page.toString()
+    page: page.toString(),
   });
   return (data.results || []).map(formatMovie);
 };
 
 // Search functionality
-export const searchMovies = async (query: string, page: number = 1): Promise<Movie[]> => {
+export const searchMovies = async (
+  query: string,
+  page: number = 1
+): Promise<Movie[]> => {
   if (!query) return [];
   const data = await fetchFromTMDB("/search/multi", {
     query,
-    page: page.toString()
+    page: page.toString(),
   });
   return (data.results || [])
-    .filter((item: any) => item.media_type === 'movie' || item.media_type === 'tv')
+    .filter(
+      (item: any) => item.media_type === "movie" || item.media_type === "tv"
+    )
     .map(formatMovie);
 };

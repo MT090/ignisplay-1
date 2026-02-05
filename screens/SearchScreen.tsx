@@ -15,7 +15,7 @@ import {
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View
+  View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -70,7 +70,7 @@ export default function SearchScreen() {
       onPress={() => navigateToDetail(item)}
       style={({ pressed }) => [
         styles.resultItem,
-        { opacity: pressed ? 0.7 : 1 }
+        { opacity: pressed ? 0.7 : 1 },
       ]}
     >
       <Image
@@ -79,16 +79,22 @@ export default function SearchScreen() {
         resizeMode="cover"
       />
       <View style={styles.resultInfo}>
-        <ThemedText type="body" style={styles.resultTitle}>{item.title}</ThemedText>
+        <ThemedText type="body" style={styles.resultTitle}>
+          {item.title}
+        </ThemedText>
         <View style={styles.resultMeta}>
-          <ThemedText type="small" style={styles.resultYear}>{item.year}</ThemedText>
+          <ThemedText type="small" style={styles.resultYear}>
+            {item.year}
+          </ThemedText>
           <ThemedText type="small" style={styles.resultType}>
-            {item.type === 'series' ? 'TV Series' : 'Movie'}
+            {item.type === "series" ? "TV Series" : "Movie"}
           </ThemedText>
         </View>
         <View style={styles.ratingContainer}>
           <Feather name="star" size={12} color={Colors.dark.primary} />
-          <ThemedText type="small" style={styles.ratingText}>{item.rating}</ThemedText>
+          <ThemedText type="small" style={styles.ratingText}>
+            {item.rating}
+          </ThemedText>
         </View>
       </View>
     </Pressable>
@@ -101,7 +107,9 @@ export default function SearchScreen() {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Feather name="chevron-left" size={24} color={Colors.dark.text} />
           </TouchableOpacity>
-          <ThemedText type="h3" style={styles.title}>Search</ThemedText>
+          <ThemedText type="h3" style={styles.title}>
+            Search
+          </ThemedText>
           <View style={{ width: 24 }} />
         </View>
 
@@ -135,16 +143,25 @@ export default function SearchScreen() {
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={
               <View style={styles.emptyState}>
-                <ThemedText type="body" style={styles.emptyText}>No results found</ThemedText>
+                <ThemedText type="body" style={styles.emptyText}>
+                  No results found
+                </ThemedText>
               </View>
             }
           />
         ) : (
-          <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <ScrollView
+            style={styles.scrollView}
+            showsVerticalScrollIndicator={false}
+          >
             <View style={styles.recentHeader}>
-              <ThemedText type="body" style={styles.sectionTitle}>Recent Searches</ThemedText>
-              <TouchableOpacity onPress={() => { }}>
-                <ThemedText type="small" style={styles.clearText}>Clear All</ThemedText>
+              <ThemedText type="body" style={styles.sectionTitle}>
+                Recent Searches
+              </ThemedText>
+              <TouchableOpacity onPress={() => {}}>
+                <ThemedText type="small" style={styles.clearText}>
+                  Clear All
+                </ThemedText>
               </TouchableOpacity>
             </View>
 
@@ -155,10 +172,20 @@ export default function SearchScreen() {
                   style={styles.searchItem}
                   onPress={() => setSearchQuery(search)}
                 >
-                  <Feather name="clock" size={16} color={Colors.dark.textSecondary} />
-                  <ThemedText style={styles.searchItemText}>{search}</ThemedText>
+                  <Feather
+                    name="clock"
+                    size={16}
+                    color={Colors.dark.textSecondary}
+                  />
+                  <ThemedText style={styles.searchItemText}>
+                    {search}
+                  </ThemedText>
                   <TouchableOpacity>
-                    <Feather name="x" size={16} color={Colors.dark.textSecondary} />
+                    <Feather
+                      name="x"
+                      size={16}
+                      color={Colors.dark.textSecondary}
+                    />
                   </TouchableOpacity>
                 </TouchableOpacity>
               ))}
@@ -287,7 +314,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: Spacing['3xl'],
+    marginTop: Spacing["3xl"],
   },
   emptyText: {
     color: Colors.dark.textSecondary,

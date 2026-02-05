@@ -10,10 +10,16 @@ export default function DownloadsScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + Spacing.xl }]}>
-      <ThemedText type="h3" style={styles.title}>Downloads</ThemedText>
+      <ThemedText type="h3" style={styles.title}>
+        Downloads
+      </ThemedText>
       <View style={styles.emptyState}>
         <View style={styles.iconContainer}>
-          <Feather name="download-cloud" size={48} color={Colors.dark.textTertiary} />
+          <Feather
+            name="download-cloud"
+            size={48}
+            color={Colors.dark.textTertiary}
+          />
         </View>
         <ThemedText type="body" style={styles.emptyText}>
           No downloads yet

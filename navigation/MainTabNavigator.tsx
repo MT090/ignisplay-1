@@ -12,7 +12,6 @@ import React from "react";
 import { Platform, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export default function MainTabNavigator() {
@@ -39,7 +38,7 @@ export default function MainTabNavigator() {
           paddingTop: Spacing.sm,
           borderTopLeftRadius: 16,
           borderTopRightRadius: 16,
-          marginBottom: Platform.OS === 'android' ? -Spacing.sm : 0,
+          marginBottom: Platform.OS === "android" ? -Spacing.sm : 0,
         },
         tabBarBackground: () =>
           Platform.OS === "ios" ? (

@@ -17,10 +17,7 @@ function HomeScreenWithHeader() {
   const navigation = useNavigation<BottomTabNavigationProp<MainTabParamList>>();
 
   return (
-    <HeaderActions
-
-      onProfilePress={() => navigation.navigate("ProfileTab")}
-    />
+    <HeaderActions onProfilePress={() => navigation.navigate("ProfileTab")} />
   );
 }
 

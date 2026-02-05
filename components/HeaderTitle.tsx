@@ -26,7 +26,10 @@ interface HeaderActionsProps {
   onProfilePress?: () => void;
 }
 
-export function HeaderActions({ onSearchPress, onProfilePress }: HeaderActionsProps) {
+export function HeaderActions({
+  onSearchPress,
+  onProfilePress,
+}: HeaderActionsProps) {
   return (
     <View style={styles.actions}>
       {onSearchPress && (
@@ -34,7 +37,7 @@ export function HeaderActions({ onSearchPress, onProfilePress }: HeaderActionsPr
           onPress={onSearchPress}
           style={({ pressed }) => [
             styles.actionButton,
-            { opacity: pressed ? 0.7 : 1 }
+            { opacity: pressed ? 0.7 : 1 },
           ]}
           hitSlop={8}
         >
@@ -45,7 +48,7 @@ export function HeaderActions({ onSearchPress, onProfilePress }: HeaderActionsPr
         onPress={onProfilePress}
         style={({ pressed }) => [
           styles.profileButton,
-          { opacity: pressed ? 0.7 : 1 }
+          { opacity: pressed ? 0.7 : 1 },
         ]}
         hitSlop={8}
       >

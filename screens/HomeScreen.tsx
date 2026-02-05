@@ -1,7 +1,15 @@
 import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Colors, Spacing } from "@/constants/theme";
-import type { HomeStackParamList } from "@/navigation/HomeStackNavigator";
-import { Movie, getActionMovies, getComedyMovies, getDramaMovies, getNewReleases, getTopMovies, getTrendingMovies } from "@/src/utils/movieUtils";
+import {
+  Movie,
+  getActionMovies,
+  getComedyMovies,
+  getDramaMovies,
+  getNewReleases,
+  getTopMovies,
+  getTrendingMovies,
+} from "@/src/utils/movieUtils";
+import type { HomeStackParamList } from "@/types/navigation";
 import { Feather } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
@@ -14,7 +22,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  View
+  View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -23,8 +31,6 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<HomeStackParamList, "Home">;
 };
-
-
 
 const CONTINUE_WATCHING: Movie[] = [];
 
@@ -40,7 +46,11 @@ function PosterCard({ movie, onPress, width = 128 }: PosterCardProps) {
       onPress={onPress}
       style={({ pressed }) => [
         styles.posterCard,
-        { width, opacity: pressed ? 0.8 : 1, transform: [{ scale: pressed ? 0.98 : 1 }] }
+        {
+          width,
+          opacity: pressed ? 0.8 : 1,
+          transform: [{ scale: pressed ? 0.98 : 1 }],
+        },
       ]}
     >
       <Image
@@ -69,7 +79,11 @@ function ContinueWatchingCard({ movie, onPress }: ContinueWatchingCardProps) {
       onPress={onPress}
       style={({ pressed }) => [
         styles.continueCard,
-        { width: cardWidth, opacity: pressed ? 0.9 : 1, transform: [{ scale: pressed ? 0.98 : 1 }] }
+        {
+          width: cardWidth,
+          opacity: pressed ? 0.9 : 1,
+          transform: [{ scale: pressed ? 0.98 : 1 }],
+        },
       ]}
     >
       <ImageBackground
@@ -88,7 +102,11 @@ function ContinueWatchingCard({ movie, onPress }: ContinueWatchingCardProps) {
           </View>
         </View>
         <View style={styles.continueContent}>
-          <ThemedText type="body" style={styles.continueTitle} numberOfLines={1}>
+          <ThemedText
+            type="body"
+            style={styles.continueTitle}
+            numberOfLines={1}
+          >
             {movie.title}
           </ThemedText>
           <View style={styles.progressContainer}>
@@ -96,7 +114,7 @@ function ContinueWatchingCard({ movie, onPress }: ContinueWatchingCardProps) {
               <View
                 style={[
                   styles.progressFill,
-                  { width: `${(movie.progress || 0) * 100}%` }
+                  { width: `${(movie.progress || 0) * 100}%` },
                 ]}
               />
             </View>
@@ -162,7 +180,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       setDramaMovies(drama);
 
       // Preload images (subset)
-      [...top, ...trending].forEach(movie => {
+      [...top, ...trending].forEach((movie) => {
         if (movie.backdropUrl) Image.prefetch(movie.backdropUrl);
       });
     };
@@ -200,7 +218,11 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       resizeMode="cover"
     >
       <LinearGradient
-        colors={["transparent", "rgba(28, 16, 34, 0.5)", "rgba(28, 16, 34, 0.95)"]}
+        colors={[
+          "transparent",
+          "rgba(28, 16, 34, 0.5)",
+          "rgba(28, 16, 34, 0.95)",
+        ]}
         locations={[0, 0.5, 1]}
         style={styles.heroGradient}
       />
@@ -208,7 +230,11 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         <ThemedText type="h1" style={styles.heroTitle}>
           {movie.title}
         </ThemedText>
-        <ThemedText type="small" style={styles.heroDescription} numberOfLines={3}>
+        <ThemedText
+          type="small"
+          style={styles.heroDescription}
+          numberOfLines={3}
+        >
           {movie.description}
         </ThemedText>
         <View style={styles.heroButtons}>
@@ -216,21 +242,25 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
             onPress={() => navigateToDetail(movie)}
             style={({ pressed }) => [
               styles.playButtonLarge,
-              { opacity: pressed ? 0.9 : 1 }
+              { opacity: pressed ? 0.9 : 1 },
             ]}
           >
             <Feather name="play" size={20} color={Colors.dark.text} />
-            <ThemedText type="body" style={styles.buttonText}>Play</ThemedText>
+            <ThemedText type="body" style={styles.buttonText}>
+              Play
+            </ThemedText>
           </Pressable>
           <Pressable
             onPress={() => navigateToDetail(movie)}
             style={({ pressed }) => [
               styles.moreInfoButton,
-              { opacity: pressed ? 0.8 : 1 }
+              { opacity: pressed ? 0.8 : 1 },
             ]}
           >
             <Feather name="info" size={20} color={Colors.dark.text} />
-            <ThemedText type="body" style={styles.buttonText}>More Info</ThemedText>
+            <ThemedText type="body" style={styles.buttonText}>
+              More Info
+            </ThemedText>
           </Pressable>
         </View>
       </View>
@@ -251,30 +281,24 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
   };
 
   const renderPosterItem = ({ item }: { item: Movie }) => (
-    <PosterCard
-      movie={item}
-      onPress={() => navigateToDetail(item)}
-    />
+    <PosterCard movie={item} onPress={() => navigateToDetail(item)} />
   );
 
   const renderContinueItem = ({ item }: { item: Movie }) => (
-    <ContinueWatchingCard
-      movie={item}
-      onPress={() => navigateToDetail(item)}
-    />
+    <ContinueWatchingCard movie={item} onPress={() => navigateToDetail(item)} />
   );
 
   const renderNewReleaseItem = ({ item }: { item: Movie }) => (
-    <PosterCard
-      movie={item}
-      onPress={() => navigateToDetail(item)}
-    />
+    <PosterCard movie={item} onPress={() => navigateToDetail(item)} />
   );
 
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={[styles.contentContainer, { paddingBottom: 100 + insets.bottom }]}
+      contentContainerStyle={[
+        styles.contentContainer,
+        { paddingBottom: 100 + insets.bottom },
+      ]}
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.heroContainer}>
@@ -296,7 +320,9 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
           )}
           keyExtractor={(item, index) => `${item.id}-${index}`}
           onMomentumScrollEnd={(event) => {
-            const page = Math.round(event.nativeEvent.contentOffset.x / SCREEN_WIDTH);
+            const page = Math.round(
+              event.nativeEvent.contentOffset.x / SCREEN_WIDTH
+            );
             if (page >= topMovies.length) {
               flatRef.current?.scrollToIndex({ index: 0, animated: false });
               setCurrentIndex(0);
@@ -304,7 +330,11 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
               setCurrentIndex(page);
             }
           }}
-          getItemLayout={(data, index) => ({ length: SCREEN_WIDTH, offset: SCREEN_WIDTH * index, index })}
+          getItemLayout={(data, index) => ({
+            length: SCREEN_WIDTH,
+            offset: SCREEN_WIDTH * index,
+            index,
+          })}
           initialScrollIndex={0}
         />
       </View>
@@ -334,7 +364,9 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.horizontalList}
-            ItemSeparatorComponent={() => <View style={{ width: Spacing.lg }} />}
+            ItemSeparatorComponent={() => (
+              <View style={{ width: Spacing.lg }} />
+            )}
           />
         </>
       )}
@@ -397,7 +429,7 @@ const styles = StyleSheet.create({
   heroContainer: {
     width: SCREEN_WIDTH,
     height: 480,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   heroBanner: {
     width: SCREEN_WIDTH,

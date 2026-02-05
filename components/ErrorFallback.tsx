@@ -1,18 +1,17 @@
-import React, { useState } from "react";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
+import { BorderRadius, Colors, Fonts, Spacing } from "@/constants/theme";
+import { Feather } from "@expo/vector-icons";
 import { reloadAppAsync } from "expo";
+import React, { useState } from "react";
 import {
-  StyleSheet,
-  View,
+  Modal,
   Pressable,
   ScrollView,
+  StyleSheet,
   Text,
-  Modal,
+  View,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { ThemedView } from "@/components/ThemedView";
-import { ThemedText } from "@/components/ThemedText";
-import { useTheme } from "@/hooks/useTheme";
-import { Spacing, BorderRadius, Fonts, Colors } from "@/constants/theme";
 
 export type ErrorFallbackProps = {
   error: Error;
@@ -20,7 +19,6 @@ export type ErrorFallbackProps = {
 };
 
 export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
-  const { theme } = useTheme();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleRestart = async () => {
@@ -41,7 +39,12 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
   };
 
   return (
-    <ThemedView style={[styles.container, { backgroundColor: Colors.dark.backgroundRoot }]}>
+    <ThemedView
+      style={[
+        styles.container,
+        { backgroundColor: Colors.dark.backgroundRoot },
+      ]}
+    >
       {__DEV__ ? (
         <Pressable
           onPress={() => setIsModalVisible(true)}
@@ -61,13 +64,14 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
         <View style={styles.iconContainer}>
           <Feather name="film" size={48} color={Colors.dark.primary} />
         </View>
-        
+
         <ThemedText type="h2" style={styles.title}>
           Oops! Something went wrong
         </ThemedText>
 
         <ThemedText type="body" style={styles.message}>
-          Ignisplay encountered an unexpected error. Please restart the app to continue streaming.
+          Ignisplay encountered an unexpected error. Please restart the app to
+          continue streaming.
         </ThemedText>
 
         <Pressable
@@ -99,7 +103,12 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
           onRequestClose={() => setIsModalVisible(false)}
         >
           <View style={styles.modalOverlay}>
-            <View style={[styles.modalContainer, { backgroundColor: Colors.dark.backgroundRoot }]}>
+            <View
+              style={[
+                styles.modalContainer,
+                { backgroundColor: Colors.dark.backgroundRoot },
+              ]}
+            >
               <View style={styles.modalHeader}>
                 <ThemedText type="h3" style={styles.modalTitle}>
                   Error Details

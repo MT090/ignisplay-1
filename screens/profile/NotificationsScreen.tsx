@@ -20,15 +20,15 @@ const NotificationsScreen = () => {
     });
   };
 
-  const NotificationItem = ({ 
-    title, 
-    description, 
-    value, 
-    onValueChange 
-  }: { 
-    title: string; 
-    description: string; 
-    value: boolean; 
+  const NotificationItem = ({
+    title,
+    description,
+    value,
+    onValueChange,
+  }: {
+    title: string;
+    description: string;
+    value: boolean;
     onValueChange: (value: boolean) => void;
   }) => (
     <View style={styles.notificationItem}>
@@ -42,7 +42,9 @@ const NotificationsScreen = () => {
       </View>
       <Switch
         trackColor={{ false: Colors.dark.surface, true: Colors.dark.primary }}
-        thumbColor={value ? Colors.light.background : Colors.dark.textTertiary}
+        thumbColor={
+          value ? Colors.light.backgroundDefault : Colors.dark.textTertiary
+        }
         onValueChange={onValueChange}
         value={value}
       />
@@ -50,47 +52,55 @@ const NotificationsScreen = () => {
   );
 
   return (
-    <ScrollView 
+    <ScrollView
       style={[styles.container, { paddingTop: insets.top + Spacing.xl }]}
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
     >
-      <ThemedText type="h3" style={styles.title}>Notifications</ThemedText>
-      
+      <ThemedText type="h3" style={styles.title}>
+        Notifications
+      </ThemedText>
+
       <View style={styles.section}>
-        <ThemedText type="h4" style={styles.sectionTitle}>Push Notifications</ThemedText>
+        <ThemedText type="h4" style={styles.sectionTitle}>
+          Push Notifications
+        </ThemedText>
         <NotificationItem
           title="Push Notifications"
           description="Receive push notifications on your device"
           value={notifications.push}
-          onValueChange={() => toggleSwitch('push')}
+          onValueChange={() => toggleSwitch("push")}
         />
       </View>
 
       <View style={styles.section}>
-        <ThemedText type="h4" style={styles.sectionTitle}>Email Notifications</ThemedText>
+        <ThemedText type="h4" style={styles.sectionTitle}>
+          Email Notifications
+        </ThemedText>
         <NotificationItem
           title="Email Notifications"
           description="Receive email notifications"
           value={notifications.email}
-          onValueChange={() => toggleSwitch('email')}
+          onValueChange={() => toggleSwitch("email")}
         />
       </View>
 
       <View style={styles.section}>
-        <ThemedText type="h4" style={styles.sectionTitle}>Content Updates</ThemedText>
+        <ThemedText type="h4" style={styles.sectionTitle}>
+          Content Updates
+        </ThemedText>
         <NotificationItem
           title="New Content"
           description="Get notified about new content"
           value={notifications.newContent}
-          onValueChange={() => toggleSwitch('newContent')}
+          onValueChange={() => toggleSwitch("newContent")}
         />
         <View style={styles.divider} />
         <NotificationItem
           title="Recommendations"
           description="Personalized content recommendations"
           value={notifications.recommendations}
-          onValueChange={() => toggleSwitch('recommendations')}
+          onValueChange={() => toggleSwitch("recommendations")}
         />
       </View>
     </ScrollView>
@@ -121,9 +131,9 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   notificationItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingVertical: Spacing.sm,
   },
   notificationTextContainer: {

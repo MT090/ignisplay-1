@@ -8,7 +8,10 @@ import React from "react";
 import { Alert, Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-type ProfileScreenNavigationProp = NativeStackNavigationProp<ProfileStackParamList, 'Profile'>;
+type ProfileScreenNavigationProp = NativeStackNavigationProp<
+  ProfileStackParamList,
+  "Profile"
+>;
 
 interface SettingItemProps {
   icon: keyof typeof Feather.glyphMap;
@@ -18,32 +21,44 @@ interface SettingItemProps {
   destructive?: boolean;
 }
 
-function SettingItem({ icon, title, onPress, showArrow = true, destructive = false }: SettingItemProps) {
+function SettingItem({
+  icon,
+  title,
+  onPress,
+  showArrow = true,
+  destructive = false,
+}: SettingItemProps) {
   return (
     <Pressable
       onPress={onPress}
-      style={({ pressed }) => [
+      style={({ pressed }: { pressed: boolean }) => [
         styles.settingItem,
-        { opacity: pressed ? 0.7 : 1 }
+        { opacity: pressed ? 0.7 : 1 },
       ]}
     >
       <View style={styles.settingLeft}>
-        <View style={[styles.settingIcon, destructive && styles.destructiveIcon]}>
-          <Feather 
-            name={icon} 
-            size={20} 
-            color={destructive ? Colors.dark.error : Colors.dark.text} 
+        <View
+          style={[styles.settingIcon, destructive && styles.destructiveIcon]}
+        >
+          <Feather
+            name={icon}
+            size={20}
+            color={destructive ? Colors.dark.error : Colors.dark.text}
           />
         </View>
-        <ThemedText 
-          type="body" 
+        <ThemedText
+          type="body"
           style={[styles.settingTitle, destructive && styles.destructiveText]}
         >
           {title}
         </ThemedText>
       </View>
       {showArrow && (
-        <Feather name="chevron-right" size={20} color={Colors.dark.textTertiary} />
+        <Feather
+          name="chevron-right"
+          size={20}
+          color={Colors.dark.textTertiary}
+        />
       )}
     </Pressable>
   );
@@ -54,83 +69,115 @@ export default function ProfileScreen() {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const handleAccount = () => {
-    navigation.navigate('Account');
+    navigation.navigate("Account");
   };
 
   const handleNotifications = () => {
-    navigation.navigate('Notifications');
+    navigation.navigate("Notifications");
   };
 
   const handlePlayback = () => {
-    navigation.navigate('Playback');
+    navigation.navigate("Playback");
+  };
+
+  const handlePaymentMethods = () => {
+    navigation.navigate("PaymentMethods");
   };
 
   const handleHelpCenter = () => {
-    navigation.navigate('HelpCenter');
+    navigation.navigate("HelpCenter");
   };
 
   const handleAbout = () => {
-    navigation.navigate('About');
+    navigation.navigate("About");
   };
 
   const handleLogout = () => {
-    Alert.alert(
-      "Log Out",
-      "Are you sure you want to log out?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel"
+    Alert.alert("Log Out", "Are you sure you want to log out?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Log Out",
+        style: "destructive",
+        onPress: () => {
+          // Reset navigation to Login screen
+          navigation
+            .getParent()
+            ?.getParent()
+            ?.reset({
+              index: 0,
+              routes: [{ name: "Login" }],
+            });
         },
-        {
-          text: "Log Out",
-          style: "destructive",
-          onPress: () => {
-            // In a real app, you would clear user data and navigate to login
-            Alert.alert("Logged Out", "You have been successfully logged out.");
-          }
-        }
-      ]
-    );
+      },
+    ]);
   };
 
   return (
-    <ScrollView 
+    <ScrollView
       style={[styles.container, { paddingTop: insets.top + Spacing.xl }]}
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
     >
-      <ThemedText type="h3" style={styles.title}>Profile</ThemedText>
-      
+      <ThemedText type="h3" style={styles.title}>
+        Profile
+      </ThemedText>
+
       <View style={styles.profileCard}>
         <View style={styles.avatar}>
           <Feather name="user" size={32} color={Colors.dark.primary} />
         </View>
         <View style={styles.profileInfo}>
-          <ThemedText type="h4" style={styles.profileName}>Guest User</ThemedText>
-          <ThemedText type="small" style={styles.profileEmail}>Sign in to sync your data</ThemedText>
+          <ThemedText type="h4" style={styles.profileName}>
+            Guest User
+          </ThemedText>
+          <ThemedText type="small" style={styles.profileEmail}>
+            Sign in to sync your data
+          </ThemedText>
         </View>
       </View>
 
-
       <View style={styles.section}>
-        <ThemedText type="small" style={styles.sectionTitle}>Settings</ThemedText>
+        <ThemedText type="small" style={styles.sectionTitle}>
+          Settings
+        </ThemedText>
         <SettingItem icon="user" title="Account" onPress={handleAccount} />
-        <SettingItem icon="bell" title="Notifications" onPress={handleNotifications} />
-        <SettingItem icon="play-circle" title="Playback" onPress={handlePlayback} />
+        <SettingItem
+          icon="bell"
+          title="Notifications"
+          onPress={handleNotifications}
+        />
+        <SettingItem
+          icon="play-circle"
+          title="Playback"
+          onPress={handlePlayback}
+        />
+        <SettingItem
+          icon="credit-card"
+          title="Payment Methods"
+          onPress={handlePaymentMethods}
+        />
       </View>
 
       <View style={styles.section}>
-        <ThemedText type="small" style={styles.sectionTitle}>Support</ThemedText>
-        <SettingItem icon="help-circle" title="Help Center" onPress={handleHelpCenter} />
+        <ThemedText type="small" style={styles.sectionTitle}>
+          Support
+        </ThemedText>
+        <SettingItem
+          icon="help-circle"
+          title="Help Center"
+          onPress={handleHelpCenter}
+        />
         <SettingItem icon="info" title="About" onPress={handleAbout} />
       </View>
 
       <View style={[styles.section, { marginBottom: 120 }]}>
-        <SettingItem 
-          icon="log-out" 
-          title="Log Out" 
-          onPress={handleLogout} 
+        <SettingItem
+          icon="log-out"
+          title="Log Out"
+          onPress={handleLogout}
           showArrow={false}
           destructive
         />

@@ -1,4 +1,6 @@
 export type RootStackParamList = {
+  Login: undefined;
+  Register: undefined;
   MainTabs: undefined;
   VideoPlayer: {
     videoUrl?: string;
@@ -42,4 +44,5 @@ export type ProfileStackParamList = {
   Playback: undefined;
   HelpCenter: undefined;
   About: undefined;
+  PaymentMethods: undefined;
 };

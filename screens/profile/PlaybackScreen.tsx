@@ -1,16 +1,16 @@
-import { ThemedText } from '@/components/ThemedText';
-import { Colors, Spacing } from '@/constants/theme';
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Switch, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ThemedText } from "@/components/ThemedText";
+import { Colors, Spacing } from "@/constants/theme";
+import React, { useState } from "react";
+import { ScrollView, StyleSheet, Switch, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const PlaybackScreen = () => {
   const insets = useSafeAreaInsets();
   const [settings, setSettings] = useState({
     autoPlayNext: true,
     autoPlayTrailer: true,
-    videoQuality: 'High',
-    downloadQuality: 'High',
+    videoQuality: "High",
+    downloadQuality: "High",
     dataSaver: false,
     autoplayPreview: true,
   });
@@ -40,31 +40,40 @@ const PlaybackScreen = () => {
           {description}
         </ThemedText>
       </View>
-      <View style={styles.settingControl}>
-        {children}
-      </View>
+      <View style={styles.settingControl}>{children}</View>
     </View>
   );
 
   return (
-    <ScrollView 
+    <ScrollView
       style={[styles.container, { paddingTop: insets.top + Spacing.xl }]}
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
     >
-      <ThemedText type="h3" style={styles.title}>Playback Settings</ThemedText>
-      
+      <ThemedText type="h3" style={styles.title}>
+        Playback Settings
+      </ThemedText>
+
       <View style={styles.section}>
-        <ThemedText type="h4" style={styles.sectionTitle}>Playback</ThemedText>
+        <ThemedText type="h4" style={styles.sectionTitle}>
+          Playback
+        </ThemedText>
         <SettingItem
           title="Autoplay Next Episode"
           description="Automatically play the next episode in a series"
         >
           <Switch
             value={settings.autoPlayNext}
-            onValueChange={() => toggleSetting('autoPlayNext')}
-            trackColor={{ false: Colors.dark.surface, true: Colors.dark.primary }}
-            thumbColor={settings.autoPlayNext ? Colors.light.background : Colors.dark.textTertiary}
+            onValueChange={() => toggleSetting("autoPlayNext")}
+            trackColor={{
+              false: Colors.dark.surface,
+              true: Colors.dark.primary,
+            }}
+            thumbColor={
+              settings.autoPlayNext
+                ? Colors.light.backgroundDefault
+                : Colors.dark.textTertiary
+            }
           />
         </SettingItem>
 
@@ -76,9 +85,16 @@ const PlaybackScreen = () => {
         >
           <Switch
             value={settings.autoPlayTrailer}
-            onValueChange={() => toggleSetting('autoPlayTrailer')}
-            trackColor={{ false: Colors.dark.surface, true: Colors.dark.primary }}
-            thumbColor={settings.autoPlayTrailer ? Colors.light.background : Colors.dark.textTertiary}
+            onValueChange={() => toggleSetting("autoPlayTrailer")}
+            trackColor={{
+              false: Colors.dark.surface,
+              true: Colors.dark.primary,
+            }}
+            thumbColor={
+              settings.autoPlayTrailer
+                ? Colors.light.backgroundDefault
+                : Colors.dark.textTertiary
+            }
           />
         </SettingItem>
 
@@ -90,15 +106,24 @@ const PlaybackScreen = () => {
         >
           <Switch
             value={settings.autoplayPreview}
-            onValueChange={() => toggleSetting('autoplayPreview')}
-            trackColor={{ false: Colors.dark.surface, true: Colors.dark.primary }}
-            thumbColor={settings.autoplayPreview ? Colors.light.background : Colors.dark.textTertiary}
+            onValueChange={() => toggleSetting("autoplayPreview")}
+            trackColor={{
+              false: Colors.dark.surface,
+              true: Colors.dark.primary,
+            }}
+            thumbColor={
+              settings.autoplayPreview
+                ? Colors.light.backgroundDefault
+                : Colors.dark.textTertiary
+            }
           />
         </SettingItem>
       </View>
 
       <View style={styles.section}>
-        <ThemedText type="h4" style={styles.sectionTitle}>Video Quality</ThemedText>
+        <ThemedText type="h4" style={styles.sectionTitle}>
+          Video Quality
+        </ThemedText>
         <SettingItem
           title="Streaming Quality"
           description="Higher quality uses more data"
@@ -121,16 +146,25 @@ const PlaybackScreen = () => {
       </View>
 
       <View style={styles.section}>
-        <ThemedText type="h4" style={styles.sectionTitle}>Data Usage</ThemedText>
+        <ThemedText type="h4" style={styles.sectionTitle}>
+          Data Usage
+        </ThemedText>
         <SettingItem
           title="Data Saver"
           description="Reduce data usage when not on Wi-Fi"
         >
           <Switch
             value={settings.dataSaver}
-            onValueChange={() => toggleSetting('dataSaver')}
-            trackColor={{ false: Colors.dark.surface, true: Colors.dark.primary }}
-            thumbColor={settings.dataSaver ? Colors.light.background : Colors.dark.textTertiary}
+            onValueChange={() => toggleSetting("dataSaver")}
+            trackColor={{
+              false: Colors.dark.surface,
+              true: Colors.dark.primary,
+            }}
+            thumbColor={
+              settings.dataSaver
+                ? Colors.light.backgroundDefault
+                : Colors.dark.textTertiary
+            }
           />
         </SettingItem>
       </View>
@@ -162,9 +196,9 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   settingItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingVertical: Spacing.sm,
   },
   settingTextContainer: {

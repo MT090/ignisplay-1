@@ -1,8 +1,7 @@
-
 import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Colors, Spacing } from "@/constants/theme";
-import type { MainTabParamList } from "@/navigation/MainTabNavigator";
 import { Movie } from "@/src/utils/movieUtils";
+import type { MainTabParamList } from "@/types/navigation";
 import { Feather } from "@expo/vector-icons";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
@@ -39,7 +38,11 @@ function PosterCard({ movie, onPress, width = 128 }: PosterCardProps) {
       onPress={onPress}
       style={({ pressed }) => [
         styles.posterCard,
-        { width, opacity: pressed ? 0.8 : 1, transform: [{ scale: pressed ? 0.98 : 1 }] }
+        {
+          width,
+          opacity: pressed ? 0.8 : 1,
+          transform: [{ scale: pressed ? 0.98 : 1 }],
+        },
       ]}
     >
       <Image
@@ -68,8 +71,8 @@ export default function MyListScreen() {
 
   const navigateToDetail = (movie: Movie) => {
     // @ts-ignore - The navigation types are a bit complex between tab/stack
-    navigation.getParent()?.navigate('HomeTab', {
-      screen: 'Detail',
+    navigation.navigate("HomeTab", {
+      screen: "Detail",
       params: {
         id: movie.id,
         title: movie.title,
@@ -79,27 +82,30 @@ export default function MyListScreen() {
         rating: movie.rating,
         duration: movie.duration,
         type: movie.type,
-      }
+      },
     });
   };
 
   const renderPosterItem = ({ item }: { item: Movie }) => (
-    <PosterCard
-      movie={item}
-      onPress={() => navigateToDetail(item)}
-    />
+    <PosterCard movie={item} onPress={() => navigateToDetail(item)} />
   );
 
-  const hasContent = HISTORY.length > 0 || FAVORITES.length > 0 || DOWNLOADS.length > 0;
+  const hasContent =
+    HISTORY.length > 0 || FAVORITES.length > 0 || DOWNLOADS.length > 0;
 
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={[styles.contentContainer, { paddingBottom: 100 + insets.bottom }]}
+      contentContainerStyle={[
+        styles.contentContainer,
+        { paddingBottom: 100 + insets.bottom },
+      ]}
       showsVerticalScrollIndicator={false}
     >
       <View style={[styles.header, { paddingTop: insets.top + Spacing.md }]}>
-        <ThemedText type="h3" style={styles.headerTitle}>My List</ThemedText>
+        <ThemedText type="h3" style={styles.headerTitle}>
+          My List
+        </ThemedText>
       </View>
 
       {!hasContent && (
@@ -124,7 +130,9 @@ export default function MyListScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.horizontalList}
-            ItemSeparatorComponent={() => <View style={{ width: Spacing.lg }} />}
+            ItemSeparatorComponent={() => (
+              <View style={{ width: Spacing.lg }} />
+            )}
           />
         </>
       )}
@@ -139,7 +147,9 @@ export default function MyListScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.horizontalList}
-            ItemSeparatorComponent={() => <View style={{ width: Spacing.lg }} />}
+            ItemSeparatorComponent={() => (
+              <View style={{ width: Spacing.lg }} />
+            )}
           />
         </>
       )}
@@ -154,7 +164,9 @@ export default function MyListScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.horizontalList}
-            ItemSeparatorComponent={() => <View style={{ width: Spacing.lg }} />}
+            ItemSeparatorComponent={() => (
+              <View style={{ width: Spacing.lg }} />
+            )}
           />
         </>
       )}
@@ -205,7 +217,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: Spacing['3xl'],
+    marginTop: Spacing["3xl"],
     gap: Spacing.sm,
   },
   emptyStateText: {

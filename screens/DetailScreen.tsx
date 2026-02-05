@@ -1,6 +1,9 @@
 import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Colors, Spacing } from "@/constants/theme";
-import type { HomeStackParamList, RootStackParamList } from "@/types/navigation";
+import type {
+  HomeStackParamList,
+  RootStackParamList,
+} from "@/types/navigation";
 import { Feather } from "@expo/vector-icons";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -47,22 +50,26 @@ const SIMILAR_MOVIES: SimilarMovie[] = [
   {
     id: "similar-1",
     title: "Ex Machina",
-    posterUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDlgkAPJMAHUOVwx4BARWT-HoaEcNClz0CrcXGZMyvBsL8IO2FqYrYvPzrGs_Jp-wGcVU5QcPllWs6Cfl_xdF8erYG-0BOP70KexYGNKW0LMdylzNveNQnXQKSK9I70BclHsEDvT68gxtcyeFNMTpVoWrNiRRsbVHaN3JESLpZRKJwA8FvgccFTGHdGhPPimxYhs4-n_1qOxiSJib_k9kOaDejpwEwBcVAYm_g0yRBLxovW4qbvTIOSZAzg9TQ4cugoNwNJ3dwzlEo",
+    posterUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDlgkAPJMAHUOVwx4BARWT-HoaEcNClz0CrcXGZMyvBsL8IO2FqYrYvPzrGs_Jp-wGcVU5QcPllWs6Cfl_xdF8erYG-0BOP70KexYGNKW0LMdylzNveNQnXQKSK9I70BclHsEDvT68gxtcyeFNMTpVoWrNiRRsbVHaN3JESLpZRKJwA8FvgccFTGHdGhPPimxYhs4-n_1qOxiSJib_k9kOaDejpwEwBcVAYm_g0yRBLxovW4qbvTIOSZAzg9TQ4cugoNwNJ3dwzlEo",
   },
   {
     id: "similar-2",
     title: "Ghost in the Shell",
-    posterUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuAlQ-jEAa50ISVPno9Sf-EqO4PyQ5ggRGYMBTvWWUIYALJ1erxztMA5PjyvhWc3Wh75ZX3cUZvDuDOF_3ZscO3zxJ9EDbLv66fLWgX8gztfUGOKvNyxpyjySax_-j-gOULeujnThUk3pU1FLp9Wc8Fr9VFQodJqRJRWQKhG9beu6yQnNnVSN1XC6lnZgsuDgSljddSBsPgTz3zx4intUoh_1CdIj5FNCpFhkh5dsjAhYP28gR6JX2gHbezTYtKQvRfhi8M0kSqPzbU",
+    posterUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAlQ-jEAa50ISVPno9Sf-EqO4PyQ5ggRGYMBTvWWUIYALJ1erxztMA5PjyvhWc3Wh75ZX3cUZvDuDOF_3ZscO3zxJ9EDbLv66fLWgX8gztfUGOKvNyxpyjySax_-j-gOULeujnThUk3pU1FLp9Wc8Fr9VFQodJqRJRWQKhG9beu6yQnNnVSN1XC6lnZgsuDgSljddSBsPgTz3zx4intUoh_1CdIj5FNCpFhkh5dsjAhYP28gR6JX2gHbezTYtKQvRfhi8M0kSqPzbU",
   },
   {
     id: "similar-3",
     title: "Minority Report",
-    posterUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBhkWknNaZegj_a3wnYVfqUH1jnI_crAuxAh35oHXja0MuJaH9HRn6e-180VPdmrXUmaFLWBYrX1D4YC6K1PAcgpyqAxVz_rREpPqO2FxOnqBe6ynpY1GJh2RxeTNTAu4hj4RCrGVZ87xEDlHdJAnQB90B2leIMtCcqprPBAC2sujg-mNX62wyzet5r7B838GOuvfeqgPg7_PRkSkNYkibEXGPMa2c95cyinSNZrggv3PiNCafEpdd_9ouEEapkUqZl31LbGM9HhHY",
+    posterUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBhkWknNaZegj_a3wnYVfqUH1jnI_crAuxAh35oHXja0MuJaH9HRn6e-180VPdmrXUmaFLWBYrX1D4YC6K1PAcgpyqAxVz_rREpPqO2FxOnqBe6ynpY1GJh2RxeTNTAu4hj4RCrGVZ87xEDlHdJAnQB90B2leIMtCcqprPBAC2sujg-mNX62wyzet5r7B838GOuvfeqgPg7_PRkSkNYkibEXGPMa2c95cyinSNZrggv3PiNCafEpdd_9ouEEapkUqZl31LbGM9HhHY",
   },
   {
     id: "similar-4",
     title: "Arrival",
-    posterUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuAZD887buXk2lekdnilHbHH0v7LEr9ohs-Yv8I0-rjpRN0mbGAVOYKeluXM8dFB9qQjrkv0CAwWvjpONfypS4ttpxbyi6Xaf73wv0sbp4mMDfZNO292eeWYcRJuTvs9osViBlqI5R_j8wKeALMmFvXA_j7y-Znm8SAR707YkdqvK2s7VmXHFmoUgYUsOznWbOZ1oQaTaTAHTR7FWyCLIbQ6zM8EkzTMY-GoQHKeT-QpdEnLG3RS0Kv-xSNuEl3bwONs6TucCdNayik",
+    posterUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAZD887buXk2lekdnilHbHH0v7LEr9ohs-Yv8I0-rjpRN0mbGAVOYKeluXM8dFB9qQjrkv0CAwWvjpONfypS4ttpxbyi6Xaf73wv0sbp4mMDfZNO292eeWYcRJuTvs9osViBlqI5R_j8wKeALMmFvXA_j7y-Znm8SAR707YkdqvK2s7VmXHFmoUgYUsOznWbOZ1oQaTaTAHTR7FWyCLIbQ6zM8EkzTMY-GoQHKeT-QpdEnLG3RS0Kv-xSNuEl3bwONs6TucCdNayik",
   },
 ];
 
@@ -84,13 +91,22 @@ function CastCard({ cast }: { cast: CastMember }) {
   );
 }
 
-function SimilarCard({ movie, onPress }: { movie: SimilarMovie; onPress: () => void }) {
+function SimilarCard({
+  movie,
+  onPress,
+}: {
+  movie: SimilarMovie;
+  onPress: () => void;
+}) {
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
         styles.similarCard,
-        { opacity: pressed ? 0.8 : 1, transform: [{ scale: pressed ? 0.98 : 1 }] }
+        {
+          opacity: pressed ? 0.8 : 1,
+          transform: [{ scale: pressed ? 0.98 : 1 }],
+        },
       ]}
     >
       <Image
@@ -106,9 +122,11 @@ function SimilarCard({ movie, onPress }: { movie: SimilarMovie; onPress: () => v
 }
 
 export default function DetailScreen({ route }: DetailScreenProps) {
-  const { id, title, posterUrl, description, year, rating, duration, type } = route.params;
+  const { id, title, posterUrl, description, year, rating, duration, type } =
+    route.params;
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   const handlePlayVideo = () => {
@@ -118,7 +136,10 @@ export default function DetailScreen({ route }: DetailScreenProps) {
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={[styles.contentContainer, { paddingBottom: 100 + insets.bottom }]}
+      contentContainerStyle={[
+        styles.contentContainer,
+        { paddingBottom: 100 + insets.bottom },
+      ]}
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.heroContainer}>
@@ -128,7 +149,11 @@ export default function DetailScreen({ route }: DetailScreenProps) {
           resizeMode="cover"
         />
         <LinearGradient
-          colors={["transparent", "rgba(28, 16, 34, 0.7)", Colors.dark.backgroundRoot]}
+          colors={[
+            "transparent",
+            "rgba(28, 16, 34, 0.7)",
+            Colors.dark.backgroundRoot,
+          ]}
           locations={[0, 0.6, 1]}
           style={styles.heroGradient}
         />
@@ -137,7 +162,7 @@ export default function DetailScreen({ route }: DetailScreenProps) {
             onPress={() => setIsBookmarked(!isBookmarked)}
             style={({ pressed }) => [
               styles.bookmarkButton,
-              { opacity: pressed ? 0.7 : 1 }
+              { opacity: pressed ? 0.7 : 1 },
             ]}
           >
             <Feather
@@ -150,24 +175,36 @@ export default function DetailScreen({ route }: DetailScreenProps) {
       </View>
 
       <View style={styles.contentSection}>
-        <ThemedText type="h1" style={styles.title}>{title}</ThemedText>
+        <ThemedText type="h1" style={styles.title}>
+          {title}
+        </ThemedText>
 
         <View style={styles.metadata}>
           {year ? (
             <View style={styles.metaItem}>
-              <ThemedText type="small" style={styles.metaText}>{year}</ThemedText>
+              <ThemedText type="small" style={styles.metaText}>
+                {year}
+              </ThemedText>
             </View>
           ) : null}
           {rating ? (
             <View style={styles.metaItem}>
               <Feather name="star" size={14} color={Colors.dark.primary} />
-              <ThemedText type="small" style={styles.metaText}>{rating}</ThemedText>
+              <ThemedText type="small" style={styles.metaText}>
+                {rating}
+              </ThemedText>
             </View>
           ) : null}
           {duration ? (
             <View style={styles.metaItem}>
-              <Feather name="clock" size={14} color={Colors.dark.textTertiary} />
-              <ThemedText type="small" style={styles.metaText}>{duration}</ThemedText>
+              <Feather
+                name="clock"
+                size={14}
+                color={Colors.dark.textTertiary}
+              />
+              <ThemedText type="small" style={styles.metaText}>
+                {duration}
+              </ThemedText>
             </View>
           ) : null}
           {type ? (
@@ -188,27 +225,33 @@ export default function DetailScreen({ route }: DetailScreenProps) {
             onPress={handlePlayVideo}
             style={({ pressed }) => [
               styles.playButton,
-              { opacity: pressed ? 0.9 : 1 }
+              { opacity: pressed ? 0.9 : 1 },
             ]}
           >
             <Feather name="play" size={20} color={Colors.dark.text} />
-            <ThemedText type="body" style={styles.playButtonText}>Play</ThemedText>
+            <ThemedText type="body" style={styles.playButtonText}>
+              Play
+            </ThemedText>
           </Pressable>
           <Pressable
             style={({ pressed }) => [
               styles.downloadButton,
-              { opacity: pressed ? 0.8 : 1 }
+              { opacity: pressed ? 0.8 : 1 },
             ]}
           >
             <Feather name="download" size={20} color={Colors.dark.text} />
-            <ThemedText type="body" style={styles.downloadButtonText}>Download</ThemedText>
+            <ThemedText type="body" style={styles.downloadButtonText}>
+              Download
+            </ThemedText>
           </Pressable>
         </View>
       </View>
 
       {/* Watch Trailer Section */}
       <View style={styles.trailerSection}>
-        <ThemedText type="h4" style={styles.sectionTitle}>Watch Trailer</ThemedText>
+        <ThemedText type="h4" style={styles.sectionTitle}>
+          Watch Trailer
+        </ThemedText>
         <Pressable onPress={handlePlayVideo} style={styles.trailerContainer}>
           <LinearGradient
             colors={["rgba(173, 43, 238, 0.1)", "rgba(173, 43, 238, 0.3)"]}
@@ -218,7 +261,10 @@ export default function DetailScreen({ route }: DetailScreenProps) {
           >
             <View style={styles.playButtonContainer}>
               <LinearGradient
-                colors={["rgba(255, 255, 255, 0.15)", "rgba(255, 255, 255, 0.05)"]}
+                colors={[
+                  "rgba(255, 255, 255, 0.15)",
+                  "rgba(255, 255, 255, 0.05)",
+                ]}
                 style={styles.trailerPlayButton}
               >
                 <Feather name="play" size={24} color={Colors.dark.text} />
@@ -229,7 +275,9 @@ export default function DetailScreen({ route }: DetailScreenProps) {
       </View>
 
       <View style={styles.section}>
-        <ThemedText type="h4" style={styles.sectionTitle}>Cast & Crew</ThemedText>
+        <ThemedText type="h4" style={styles.sectionTitle}>
+          Cast & Crew
+        </ThemedText>
         <FlatList
           data={CAST_DATA}
           renderItem={({ item }) => <CastCard cast={item} />}
@@ -242,11 +290,13 @@ export default function DetailScreen({ route }: DetailScreenProps) {
       </View>
 
       <View style={styles.section}>
-        <ThemedText type="h4" style={styles.sectionTitle}>Similar Titles</ThemedText>
+        <ThemedText type="h4" style={styles.sectionTitle}>
+          Similar Titles
+        </ThemedText>
         <FlatList
           data={SIMILAR_MOVIES}
           renderItem={({ item }) => (
-            <SimilarCard movie={item} onPress={() => { }} />
+            <SimilarCard movie={item} onPress={() => {}} />
           )}
           keyExtractor={(item) => item.id}
           horizontal
