@@ -1,11 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAnalytics, isSupported } from "firebase/analytics";
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { Auth, getAuth } from "firebase/auth";
-import {
-  getReactNativePersistence,
-  initializeAuth,
-} from "firebase/auth/react-native";
 import { getFirestore } from "firebase/firestore";
 import { Platform } from "react-native";
 
@@ -29,13 +24,20 @@ let auth: Auth;
 if (Platform.OS === "web") {
   auth = getAuth(app);
 } else {
-  // For React Native, prefer initializeAuth with AsyncStorage persistence
+  // For React Native (including Expo Go), load persistence helpers dynamically
+  // so bundlers won't fail if AsyncStorage isn't installed.
   try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const AsyncStorage =
+      require("@react-native-async-storage/async-storage").default;
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const rnAuth = require("firebase/auth/react-native");
+    const { initializeAuth, getReactNativePersistence } = rnAuth;
     auth = initializeAuth(app, {
       persistence: getReactNativePersistence(AsyncStorage),
     });
   } catch (e) {
-    // If initializeAuth was already called elsewhere, fallback to getAuth
+    // If any of the native persistence modules are unavailable, fall back.
     // eslint-disable-next-line no-console
     console.warn("initializeAuth fallback to getAuth:", e);
     auth = getAuth(app);

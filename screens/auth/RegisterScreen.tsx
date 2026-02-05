@@ -1,11 +1,12 @@
 import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Colors, Spacing, Typography } from "@/constants/theme";
-import { auth } from "@/src/firebase";
+import { auth, db } from "@/src/firebase";
 import { RootStackParamList } from "@/types/navigation";
 import { Feather } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
@@ -70,7 +71,39 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
     setError("");
     setIsLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, email.trim(), password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email.trim(),
+        password,
+      );
+
+      // Update display name on the Firebase Auth user
+      if (userCredential.user) {
+        try {
+          await updateProfile(userCredential.user, {
+            displayName: name.trim(),
+          });
+        } catch (updErr) {
+          // non-fatal; continue
+          // eslint-disable-next-line no-console
+          console.warn("updateProfile failed:", updErr);
+        }
+
+        // Create a user document in Firestore
+        try {
+          const userRef = doc(db, "users", userCredential.user.uid);
+          await setDoc(userRef, {
+            name: name.trim(),
+            email: email.trim(),
+            createdAt: serverTimestamp(),
+          });
+        } catch (dbErr) {
+          // non-fatal; notify but allow auth to proceed
+          // eslint-disable-next-line no-console
+          console.warn("Failed to create user doc:", dbErr);
+        }
+      }
+
       // DO NOT navigate here — auth state will trigger navigation.
     } catch (e: any) {
       const msg = e?.message || "Registration failed";
