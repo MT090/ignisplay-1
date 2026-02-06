@@ -11,6 +11,7 @@ import MainTabNavigator from "@/navigation/MainTabNavigator";
 import LoginScreen from "@/screens/auth/LoginScreen";
 import RegisterScreen from "@/screens/auth/RegisterScreen";
 import VideoPlayerScreen from "@/screens/VideoPlayerScreen";
+import { WatchHistoryProvider } from "@/src/context/WatchHistoryContext";
 import { auth } from "@/src/firebase";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
@@ -39,33 +40,38 @@ export default function App() {
             publishableKey="pk_test_51P..." // Replace with your actual Stripe Publishable Key
             merchantIdentifier="merchant.com.ignisplay" // Required for Apple Pay
           >
-            <NavigationContainer>
-              <Stack.Navigator
-                initialRouteName={user ? "MainTabs" : "Login"}
-                screenOptions={{
-                  headerShown: false,
-                  contentStyle: { backgroundColor: "#1c1022" },
-                }}
-              >
-                {!user ? (
-                  <>
-                    <Stack.Screen name="Login" component={LoginScreen} />
-                    <Stack.Screen name="Register" component={RegisterScreen} />
-                  </>
-                ) : (
-                  <>
-                    <Stack.Screen
-                      name="MainTabs"
-                      component={MainTabNavigator}
-                    />
-                    <Stack.Screen
-                      name="VideoPlayer"
-                      component={VideoPlayerScreen}
-                    />
-                  </>
-                )}
-              </Stack.Navigator>
-            </NavigationContainer>
+            <WatchHistoryProvider>
+              <NavigationContainer>
+                <Stack.Navigator
+                  initialRouteName={user ? "MainTabs" : "Login"}
+                  screenOptions={{
+                    headerShown: false,
+                    contentStyle: { backgroundColor: "#1c1022" },
+                  }}
+                >
+                  {!user ? (
+                    <>
+                      <Stack.Screen name="Login" component={LoginScreen} />
+                      <Stack.Screen
+                        name="Register"
+                        component={RegisterScreen}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Stack.Screen
+                        name="MainTabs"
+                        component={MainTabNavigator}
+                      />
+                      <Stack.Screen
+                        name="VideoPlayer"
+                        component={VideoPlayerScreen}
+                      />
+                    </>
+                  )}
+                </Stack.Navigator>
+              </NavigationContainer>
+            </WatchHistoryProvider>
           </StripeProviderWrapper>
           <StatusBar style="light" />
         </GestureHandlerRootView>

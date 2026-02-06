@@ -1,5 +1,6 @@
 import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Colors, Spacing } from "@/constants/theme";
+import { useWatchHistory } from "@/src/context/WatchHistoryContext";
 import type {
   HomeStackParamList,
   RootStackParamList,
@@ -8,7 +9,7 @@ import { Feather } from "@expo/vector-icons";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -128,6 +129,22 @@ export default function DetailScreen({ route }: DetailScreenProps) {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const { addToHistory } = useWatchHistory();
+
+  // Save to watch history when this screen is opened
+  useEffect(() => {
+    addToHistory({
+      id,
+      title,
+      posterUrl,
+      backdropUrl: posterUrl,
+      description,
+      year,
+      rating,
+      duration,
+      type,
+    });
+  }, [id]);
 
   const handlePlayVideo = () => {
     navigation.navigate("VideoPlayer", { title, id, type });

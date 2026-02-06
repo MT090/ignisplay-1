@@ -2,10 +2,8 @@ import { ThemedText } from "@/components/ThemedText";
 import { Colors, Spacing } from "@/constants/theme";
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, Switch, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const NotificationsScreen = () => {
-  const insets = useSafeAreaInsets();
   const [notifications, setNotifications] = useState({
     push: true,
     email: true,
@@ -53,13 +51,10 @@ const NotificationsScreen = () => {
 
   return (
     <ScrollView
-      style={[styles.container, { paddingTop: insets.top + Spacing.xl }]}
+      style={styles.container}
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
     >
-      <ThemedText type="h3" style={styles.title}>
-        Notifications
-      </ThemedText>
 
       <View style={styles.section}>
         <ThemedText type="h4" style={styles.sectionTitle}>
@@ -114,11 +109,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
   },
   contentContainer: {
+    paddingTop: Spacing.lg,
     paddingBottom: Spacing.xl,
-  },
-  title: {
-    color: Colors.dark.text,
-    marginBottom: Spacing.xl,
   },
   section: {
     marginBottom: Spacing.xl,

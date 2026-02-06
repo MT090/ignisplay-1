@@ -1,77 +1,85 @@
 import { ThemedText } from "@/components/ThemedText";
 import { Colors, Spacing } from "@/constants/theme";
 import { Feather } from "@expo/vector-icons";
-import React from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React, { useState } from "react";
+import { Alert, Linking, Pressable, ScrollView, StyleSheet, View } from "react-native";
 
-const HelpCenterScreen = ({ navigation }: { navigation: any }) => {
-  const insets = useSafeAreaInsets();
+interface HelpTopic {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  content: string;
+}
 
-  const helpTopics = [
-    {
-      id: "account",
-      title: "Account & Profile",
-      description: "Manage your account settings and profile information",
-      icon: "user",
-    },
-    {
-      id: "playback",
-      title: "Playback Issues",
-      description: "Troubleshoot video playback problems",
-      icon: "play-circle",
-    },
-    {
-      id: "subscription",
-      title: "Subscription & Billing",
-      description: "Manage your subscription and payment methods",
-      icon: "credit-card",
-    },
-    {
-      id: "downloads",
-      title: "Downloads",
-      description: "Learn how to download and watch offline",
-      icon: "download",
-    },
-    {
-      id: "parental",
-      title: "Parental Controls",
-      description: "Set up and manage parental controls",
-      icon: "shield",
-    },
-  ];
+const helpTopics: HelpTopic[] = [
+  {
+    id: "account",
+    title: "Account & Profile",
+    description: "Manage your account settings and profile information",
+    icon: "user",
+    content:
+      "You can manage your account settings from the Profile > Account section. Here you can update your display name, view your email, and manage your subscription.",
+  },
+  {
+    id: "playback",
+    title: "Playback Issues",
+    description: "Troubleshoot video playback problems",
+    icon: "play-circle",
+    content:
+      "If you are experiencing playback issues, try the following:\n\n1. Check your internet connection\n2. Restart the app\n3. Clear the app cache\n4. Update to the latest version\n5. Try lowering the video quality in Settings > Playback",
+  },
+  {
+    id: "subscription",
+    title: "Subscription & Billing",
+    description: "Manage your subscription and payment methods",
+    icon: "credit-card",
+    content:
+      "Manage your subscription from Profile > Payment Methods. You can view your current plan, update payment methods, and manage billing settings.",
+  },
+  {
+    id: "downloads",
+    title: "Downloads",
+    description: "Learn how to download and watch offline",
+    icon: "download",
+    content:
+      "To download content for offline viewing:\n\n1. Find a movie or show you want to download\n2. Tap the download button on the detail page\n3. Access your downloads from the My List tab\n\nNote: Downloads are available for select titles only.",
+  },
+  {
+    id: "parental",
+    title: "Parental Controls",
+    description: "Set up and manage parental controls",
+    icon: "shield",
+    content:
+      "Parental controls allow you to restrict content based on maturity ratings. You can set up a PIN and configure age restrictions from your account settings. Contact support for help setting this up.",
+  },
+];
+
+const HelpCenterScreen = () => {
+  const [expandedTopic, setExpandedTopic] = useState<string | null>(null);
 
   const handleTopicPress = (topicId: string) => {
-    // In a real app, this would navigate to a specific help article
-    navigation.navigate("HelpArticle", { topicId });
+    setExpandedTopic(expandedTopic === topicId ? null : topicId);
+  };
+
+  const handleContactSupport = () => {
+    Alert.alert("Contact Support", "How would you like to reach us?", [
+      {
+        text: "Email",
+        onPress: () => Linking.openURL("mailto:support@ignisplay.com"),
+      },
+      { text: "Cancel", style: "cancel" },
+    ]);
   };
 
   return (
     <ScrollView
-      style={[styles.container, { paddingTop: insets.top + Spacing.xl }]}
+      style={styles.container}
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
     >
-      <ThemedText type="h3" style={styles.title}>
-        Help Center
-      </ThemedText>
-
-      <View style={styles.searchContainer}>
-        <View style={styles.searchInput}>
-          <Feather
-            name="search"
-            size={20}
-            color={Colors.dark.textTertiary}
-            style={styles.searchIcon}
-          />
-          <ThemedText style={styles.searchPlaceholder}>
-            Search help articles
-          </ThemedText>
-        </View>
-      </View>
-
       <View style={styles.section}>
-        <ThemedText type="h4" style={styles.sectionTitle}>
+        <ThemedText type="small" style={styles.sectionLabel}>
           Popular Topics
         </ThemedText>
 
@@ -80,32 +88,45 @@ const HelpCenterScreen = ({ navigation }: { navigation: any }) => {
             <Pressable
               style={({ pressed }) => [
                 styles.topicItem,
+                expandedTopic === topic.id && styles.topicItemExpanded,
                 { opacity: pressed ? 0.7 : 1 },
               ]}
               onPress={() => handleTopicPress(topic.id)}
             >
-              <View style={styles.topicIcon}>
+              <View style={styles.topicHeader}>
+                <View style={styles.topicIcon}>
+                  <Feather
+                    name={topic.icon as any}
+                    size={20}
+                    color={Colors.dark.primary}
+                  />
+                </View>
+                <View style={styles.topicTextContainer}>
+                  <ThemedText type="body" style={styles.topicTitle}>
+                    {topic.title}
+                  </ThemedText>
+                  <ThemedText type="small" style={styles.topicDescription}>
+                    {topic.description}
+                  </ThemedText>
+                </View>
                 <Feather
-                  name={topic.icon as any}
+                  name={
+                    expandedTopic === topic.id ? "chevron-up" : "chevron-down"
+                  }
                   size={20}
-                  color={Colors.dark.primary}
+                  color={Colors.dark.textTertiary}
                 />
               </View>
-              <View style={styles.topicTextContainer}>
-                <ThemedText type="body" style={styles.topicTitle}>
-                  {topic.title}
-                </ThemedText>
-                <ThemedText type="small" style={styles.topicDescription}>
-                  {topic.description}
-                </ThemedText>
-              </View>
-              <Feather
-                name="chevron-right"
-                size={20}
-                color={Colors.dark.textTertiary}
-              />
+              {expandedTopic === topic.id && (
+                <View style={styles.topicContent}>
+                  <View style={styles.topicDivider} />
+                  <ThemedText type="body" style={styles.topicContentText}>
+                    {topic.content}
+                  </ThemedText>
+                </View>
+              )}
             </Pressable>
-            {index < helpTopics.length - 1 && <View style={styles.divider} />}
+            {index < helpTopics.length - 1 && <View style={{ height: Spacing.sm }} />}
           </React.Fragment>
         ))}
       </View>
@@ -123,8 +144,9 @@ const HelpCenterScreen = ({ navigation }: { navigation: any }) => {
             styles.contactButton,
             { opacity: pressed ? 0.7 : 1 },
           ]}
-          onPress={() => {}}
+          onPress={handleContactSupport}
         >
+          <Feather name="mail" size={18} color={Colors.dark.buttonText} />
           <ThemedText style={styles.contactButtonText}>
             Contact Support
           </ThemedText>
@@ -141,41 +163,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
   },
   contentContainer: {
-    paddingBottom: Spacing.xl * 2,
-  },
-  title: {
-    color: Colors.dark.text,
-    marginBottom: Spacing.xl,
-  },
-  searchContainer: {
-    marginBottom: Spacing.xl,
-  },
-  searchInput: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Colors.dark.surface,
-    borderRadius: 8,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-  },
-  searchIcon: {
-    marginRight: Spacing.sm,
-  },
-  searchPlaceholder: {
-    color: Colors.dark.textTertiary,
+    paddingTop: Spacing.lg,
+    paddingBottom: Spacing["3xl"],
   },
   section: {
     marginBottom: Spacing.xl,
+  },
+  sectionLabel: {
+    color: Colors.dark.textTertiary,
+    marginBottom: Spacing.md,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  topicItem: {
     backgroundColor: Colors.dark.surface,
     borderRadius: 12,
     overflow: "hidden",
   },
-  sectionTitle: {
-    color: Colors.dark.primary,
-    padding: Spacing.lg,
-    paddingBottom: Spacing.md,
+  topicItemExpanded: {
+    borderWidth: 1,
+    borderColor: "rgba(173, 43, 238, 0.2)",
   },
-  topicItem: {
+  topicHeader: {
     flexDirection: "row",
     alignItems: "center",
     padding: Spacing.lg,
@@ -184,7 +193,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "rgba(99, 102, 241, 0.15)",
+    backgroundColor: "rgba(173, 43, 238, 0.15)",
     alignItems: "center",
     justifyContent: "center",
     marginRight: Spacing.md,
@@ -200,16 +209,26 @@ const styles = StyleSheet.create({
   topicDescription: {
     color: Colors.dark.textTertiary,
   },
-  divider: {
+  topicContent: {
+    paddingHorizontal: Spacing.lg,
+    paddingBottom: Spacing.lg,
+  },
+  topicDivider: {
     height: 1,
     backgroundColor: Colors.dark.backgroundDefault,
-    marginLeft: Spacing.lg,
+    marginBottom: Spacing.md,
+  },
+  topicContentText: {
+    color: Colors.dark.textSecondary,
+    lineHeight: 22,
   },
   contactSection: {
-    backgroundColor: "rgba(99, 102, 241, 0.1)",
+    backgroundColor: "rgba(173, 43, 238, 0.08)",
     borderRadius: 12,
     padding: Spacing.lg,
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: "rgba(173, 43, 238, 0.15)",
   },
   contactTitle: {
     color: Colors.dark.primary,
@@ -220,12 +239,16 @@ const styles = StyleSheet.create({
     color: Colors.dark.textTertiary,
     textAlign: "center",
     marginBottom: Spacing.lg,
+    lineHeight: 20,
   },
   contactButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
     backgroundColor: Colors.dark.primary,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
-    borderRadius: 20,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.md,
+    borderRadius: 24,
   },
   contactButtonText: {
     color: Colors.dark.buttonText,

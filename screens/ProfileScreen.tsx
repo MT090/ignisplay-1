@@ -1,9 +1,11 @@
 import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Colors, Spacing } from "@/constants/theme";
+import { auth } from "@/src/firebase";
 import { ProfileStackParamList } from "@/types/navigation";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { signOut } from "firebase/auth";
 import React from "react";
 import { Alert, Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -92,6 +94,8 @@ export default function ProfileScreen() {
     navigation.navigate("About");
   };
 
+  const currentUser = auth.currentUser;
+
   const handleLogout = () => {
     Alert.alert("Log Out", "Are you sure you want to log out?", [
       {
@@ -101,15 +105,13 @@ export default function ProfileScreen() {
       {
         text: "Log Out",
         style: "destructive",
-        onPress: () => {
-          // Reset navigation to Login screen
-          navigation
-            .getParent()
-            ?.getParent()
-            ?.reset({
-              index: 0,
-              routes: [{ name: "Login" }],
-            });
+        onPress: async () => {
+          try {
+            await signOut(auth);
+            // Auth state change in App.tsx will automatically redirect to Login
+          } catch (e: any) {
+            Alert.alert("Error", e?.message || "Failed to log out");
+          }
         },
       },
     ]);
@@ -131,10 +133,10 @@ export default function ProfileScreen() {
         </View>
         <View style={styles.profileInfo}>
           <ThemedText type="h4" style={styles.profileName}>
-            Guest User
+            {currentUser?.displayName || "User"}
           </ThemedText>
           <ThemedText type="small" style={styles.profileEmail}>
-            Sign in to sync your data
+            {currentUser?.email || "No email"}
           </ThemedText>
         </View>
       </View>

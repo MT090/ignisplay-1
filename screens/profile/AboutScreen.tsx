@@ -3,13 +3,11 @@ import { Colors, Spacing } from "@/constants/theme";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
 import { Linking, Pressable, ScrollView, StyleSheet, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const APP_VERSION = "1.0.0";
 const APP_BUILD = "1";
 
 const AboutScreen = () => {
-  const insets = useSafeAreaInsets();
 
   const openLink = async (url: string) => {
     try {
@@ -70,7 +68,7 @@ const AboutScreen = () => {
 
   return (
     <ScrollView
-      style={[styles.container, { paddingTop: insets.top + Spacing.xl }]}
+      style={styles.container}
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
     >
@@ -176,6 +174,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
   },
   contentContainer: {
+    paddingTop: Spacing.lg,
     paddingBottom: Spacing.xl * 2,
   },
   header: {
