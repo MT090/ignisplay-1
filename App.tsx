@@ -22,15 +22,22 @@ export default function App() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  console.log("[v0] App rendering, loading:", loading, "user:", !!user);
+
   useEffect(() => {
+    console.log("[v0] Setting up onAuthStateChanged listener");
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log("[v0] Auth state changed, user:", currentUser?.email || "none");
       setUser(currentUser);
       setLoading(false);
     });
     return unsubscribe;
   }, []);
 
-  if (loading) return null;
+  if (loading) {
+    console.log("[v0] Still loading auth state...");
+    return null;
+  }
 
   return (
     <ErrorBoundary>
