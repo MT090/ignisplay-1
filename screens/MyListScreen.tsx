@@ -1,5 +1,6 @@
 import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Colors, Spacing } from "@/constants/theme";
+import { useAppData } from "@/src/context/AppDataContext";
 import { Movie } from "@/src/utils/movieUtils";
 import type { MainTabParamList } from "@/types/navigation";
 import { Feather } from "@expo/vector-icons";
@@ -22,8 +23,6 @@ const COLUMN_COUNT = 2;
 const ITEM_WIDTH = (SCREEN_WIDTH - Spacing.lg * 2 - Spacing.md) / COLUMN_COUNT;
 const ITEM_HEIGHT = ITEM_WIDTH * 1.5;
 
-const HISTORY: Movie[] = [];
-const FAVORITES: Movie[] = [];
 const DOWNLOADS: Movie[] = [];
 
 interface PosterCardProps {
@@ -67,6 +66,7 @@ function SectionHeader({ title }: { title: string }) {
 
 export default function MyListScreen() {
   const insets = useSafeAreaInsets();
+  const { history, myList } = useAppData();
   const navigation = useNavigation<BottomTabNavigationProp<MainTabParamList>>();
 
   const navigateToDetail = (movie: Movie) => {
@@ -91,7 +91,7 @@ export default function MyListScreen() {
   );
 
   const hasContent =
-    HISTORY.length > 0 || FAVORITES.length > 0 || DOWNLOADS.length > 0;
+    history.length > 0 || myList.length > 0 || DOWNLOADS.length > 0;
 
   return (
     <ScrollView
@@ -120,11 +120,11 @@ export default function MyListScreen() {
         </View>
       )}
 
-      {HISTORY.length > 0 && (
+      {history.length > 0 && (
         <>
           <SectionHeader title="History" />
           <FlatList
-            data={HISTORY}
+            data={history}
             renderItem={renderPosterItem}
             keyExtractor={(item) => item.id}
             horizontal
@@ -137,11 +137,11 @@ export default function MyListScreen() {
         </>
       )}
 
-      {FAVORITES.length > 0 && (
+      {myList.length > 0 && (
         <>
-          <SectionHeader title="Favorites" />
+          <SectionHeader title="My List" />
           <FlatList
-            data={FAVORITES}
+            data={myList}
             renderItem={renderPosterItem}
             keyExtractor={(item) => item.id}
             horizontal

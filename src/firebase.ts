@@ -1,10 +1,14 @@
 import { getAnalytics, isSupported } from "firebase/analytics";
-import { getApp, getApps, initializeApp } from "firebase/app";
+import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
 import { Auth, getAuth } from "firebase/auth";
+import {
+  getReactNativePersistence,
+  initializeAuth,
+} from "firebase/auth/react-native";
 import { getFirestore } from "firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDwWH3e-mYMU1J7xeiLlpVGoyIuW5HBEPs",
   authDomain: "ignis-c07ef.firebaseapp.com",
@@ -15,38 +19,29 @@ const firebaseConfig = {
   measurementId: "G-59WWZ1JR4P",
 };
 
-// Initialize Firebase defensively
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+const app: FirebaseApp = getApps().length
+  ? getApp()
+  : initializeApp(firebaseConfig);
 
-// Initialize Auth with persistence
-let auth: Auth;
-
-if (Platform.OS === "web") {
-  auth = getAuth(app);
-} else {
-  // For React Native (including Expo Go), load persistence helpers dynamically
-  // so bundlers won't fail if AsyncStorage isn't installed.
+const createReactNativeAuth = (firebaseApp: FirebaseApp): Auth => {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const AsyncStorage =
-      require("@react-native-async-storage/async-storage").default;
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const rnAuth = require("firebase/auth/react-native");
-    const { initializeAuth, getReactNativePersistence } = rnAuth;
-    auth = initializeAuth(app, {
+    return initializeAuth(firebaseApp, {
       persistence: getReactNativePersistence(AsyncStorage),
     });
-  } catch (e) {
-    // If any of the native persistence modules are unavailable, fall back.
-    // eslint-disable-next-line no-console
-    console.warn("initializeAuth fallback to getAuth:", e);
-    auth = getAuth(app);
+  } catch (error) {
+    console.warn(
+      "React Native auth persistence unavailable, using getAuth:",
+      error,
+    );
+    return getAuth(firebaseApp);
   }
-}
+};
+
+const auth: Auth =
+  Platform.OS === "web" ? getAuth(app) : createReactNativeAuth(app);
 
 const db = getFirestore(app);
 
-// Initialize Analytics conditionally (it only works on Web for the JS SDK)
 const analytics = isSupported().then((supported) =>
   supported ? getAnalytics(app) : null,
 );

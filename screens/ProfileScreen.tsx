@@ -1,9 +1,12 @@
 import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Colors, Spacing } from "@/constants/theme";
+import { useAppData } from "@/src/context/AppDataContext";
+import { auth } from "@/src/firebase";
 import { ProfileStackParamList } from "@/types/navigation";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { signOut } from "firebase/auth";
 import React from "react";
 import { Alert, Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -67,6 +70,7 @@ function SettingItem({
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<ProfileScreenNavigationProp>();
+  const { user, subscription } = useAppData();
 
   const handleAccount = () => {
     navigation.navigate("Account");
@@ -102,14 +106,7 @@ export default function ProfileScreen() {
         text: "Log Out",
         style: "destructive",
         onPress: () => {
-          // Reset navigation to Login screen
-          navigation
-            .getParent()
-            ?.getParent()
-            ?.reset({
-              index: 0,
-              routes: [{ name: "Login" }],
-            });
+          signOut(auth);
         },
       },
     ]);
@@ -131,11 +128,16 @@ export default function ProfileScreen() {
         </View>
         <View style={styles.profileInfo}>
           <ThemedText type="h4" style={styles.profileName}>
-            Guest User
+            {user?.displayName || "Ignisplay User"}
           </ThemedText>
           <ThemedText type="small" style={styles.profileEmail}>
-            Sign in to sync your data
+            {user?.email || "No account connected"}
           </ThemedText>
+          {subscription && (
+            <ThemedText type="small" style={styles.subscriptionLabel}>
+              Active plan: {subscription.name}
+            </ThemedText>
+          )}
         </View>
       </View>
 
@@ -225,6 +227,10 @@ const styles = StyleSheet.create({
   },
   profileEmail: {
     color: Colors.dark.textTertiary,
+  },
+  subscriptionLabel: {
+    color: Colors.dark.primary,
+    marginTop: Spacing.xs,
   },
   section: {
     marginBottom: Spacing.xl,

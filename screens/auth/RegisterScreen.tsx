@@ -38,6 +38,19 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
 
   const [error, setError] = useState("");
 
+  const getAuthErrorMessage = (code?: string) => {
+    switch (code) {
+      case "auth/email-already-in-use":
+        return "This email is already registered. Please log in.";
+      case "auth/invalid-email":
+        return "Please enter a valid email address.";
+      case "auth/weak-password":
+        return "Choose a stronger password.";
+      default:
+        return "Unable to create account right now. Please try again.";
+    }
+  };
+
   const generateRandomPassword = () => {
     const chars =
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
@@ -73,8 +86,8 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
-        email.trim(),
-        password,
+        email.trim().toLowerCase(),
+        password
       );
 
       // Update display name on the Firebase Auth user
@@ -94,7 +107,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
           const userRef = doc(db, "users", userCredential.user.uid);
           await setDoc(userRef, {
             name: name.trim(),
-            email: email.trim(),
+            email: email.trim().toLowerCase(),
             createdAt: serverTimestamp(),
           });
         } catch (dbErr) {
@@ -106,7 +119,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
 
       // DO NOT navigate here — auth state will trigger navigation.
     } catch (e: any) {
-      const msg = e?.message || "Registration failed";
+      const msg = getAuthErrorMessage(e?.code);
       Alert.alert("Registration error", msg);
       setError(msg);
     } finally {
