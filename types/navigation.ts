@@ -7,6 +7,11 @@ export type RootStackParamList = {
     title?: string;
     id?: string;
     type?: "movie" | "series";
+    posterUrl?: string;
+    description?: string;
+    year?: string;
+    rating?: string;
+    resolution?: "480p" | "720p" | "1080p";
   };
   Account: undefined;
   Notifications: undefined;

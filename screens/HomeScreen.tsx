@@ -1,5 +1,6 @@
 import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Colors, Spacing } from "@/constants/theme";
+import { useAppData } from "@/src/context/AppDataContext";
 import {
   Movie,
   getActionMovies,
@@ -31,8 +32,6 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<HomeStackParamList, "Home">;
 };
-
-const CONTINUE_WATCHING: Movie[] = [];
 
 interface PosterCardProps {
   movie: Movie;
@@ -151,6 +150,7 @@ function SectionHeader({ title, onAction, actionLabel }: SectionHeaderProps) {
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
   const insets = useSafeAreaInsets();
+  const { history } = useAppData();
 
   const [topMovies, setTopMovies] = useState<Movie[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -354,11 +354,11 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         ItemSeparatorComponent={() => <View style={{ width: Spacing.lg }} />}
       />
 
-      {CONTINUE_WATCHING.length > 0 && (
+      {history.length > 0 && (
         <>
           <SectionHeader title="Continue Watching" />
           <FlatList
-            data={CONTINUE_WATCHING}
+            data={history}
             renderItem={renderContinueItem}
             keyExtractor={(item) => item.id}
             horizontal
@@ -381,6 +381,8 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         contentContainerStyle={styles.horizontalList}
         ItemSeparatorComponent={() => <View style={{ width: Spacing.lg }} />}
       />
+
+      <SectionHeader title="Categories" />
 
       <SectionHeader title="Action Movies" />
       <FlatList
