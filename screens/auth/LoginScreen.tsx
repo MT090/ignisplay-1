@@ -38,6 +38,21 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
 
   const [error, setError] = useState("");
 
+  const getAuthErrorMessage = (code?: string) => {
+    switch (code) {
+      case "auth/invalid-credential":
+      case "auth/wrong-password":
+      case "auth/user-not-found":
+        return "Invalid email or password.";
+      case "auth/invalid-email":
+        return "Please enter a valid email address.";
+      case "auth/too-many-requests":
+        return "Too many attempts. Please wait and try again.";
+      default:
+        return "Unable to sign in right now. Please try again.";
+    }
+  };
+
   const handleLogin = async () => {
     Keyboard.dismiss();
     if (!email.trim() || !password) {
@@ -53,15 +68,13 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     setError("");
     setIsLoading(true);
     try {
-      const userCredential = await signInWithEmailAndPassword(
+      await signInWithEmailAndPassword(
         auth,
-        email.trim(),
+        email.trim().toLowerCase(),
         password
       );
-      console.log("Logged in:", userCredential.user.email);
-      // DO NOT navigate here — app is gated by auth state.
     } catch (e: any) {
-      const msg = e?.message || "Login failed";
+      const msg = getAuthErrorMessage(e?.code);
       Alert.alert("Login error", msg);
       setError(msg);
     } finally {

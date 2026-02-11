@@ -1,5 +1,11 @@
 import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Colors, Spacing } from "@/constants/theme";
+import { useAppData } from "@/src/context/AppDataContext";
+import {
+  RESOLUTION_OPTIONS,
+  ResolutionOption,
+  isPremiumResolution,
+} from "@/src/utils/subscription";
 import type {
   HomeStackParamList,
   RootStackParamList,
@@ -8,7 +14,7 @@ import { Feather } from "@expo/vector-icons";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -127,10 +133,45 @@ export default function DetailScreen({ route }: DetailScreenProps) {
   const insets = useSafeAreaInsets();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const { addToHistory, toggleMyList, isInMyList, subscription } = useAppData();
+  const [selectedResolution, setSelectedResolution] =
+    useState<ResolutionOption>("480p");
+  const isBookmarked = useMemo(() => isInMyList(id), [id, isInMyList]);
 
   const handlePlayVideo = () => {
-    navigation.navigate("VideoPlayer", { title, id, type });
+    if (isPremiumResolution(selectedResolution) && !subscription) {
+      navigation.navigate("MainTabs");
+      return;
+    }
+
+    const movie = {
+      id,
+      title,
+      posterUrl,
+      description,
+      year,
+      rating,
+      duration,
+      type,
+    };
+    addToHistory(movie);
+    navigation.navigate("VideoPlayer", {
+      ...movie,
+      resolution: selectedResolution,
+    });
+  };
+
+  const handleToggleList = () => {
+    toggleMyList({
+      id,
+      title,
+      posterUrl,
+      description,
+      year,
+      rating,
+      duration,
+      type,
+    });
   };
 
   return (
@@ -159,7 +200,7 @@ export default function DetailScreen({ route }: DetailScreenProps) {
         />
         <View style={[styles.headerActions, { top: insets.top + Spacing.lg }]}>
           <Pressable
-            onPress={() => setIsBookmarked(!isBookmarked)}
+            onPress={handleToggleList}
             style={({ pressed }) => [
               styles.bookmarkButton,
               { opacity: pressed ? 0.7 : 1 },
@@ -234,16 +275,64 @@ export default function DetailScreen({ route }: DetailScreenProps) {
             </ThemedText>
           </Pressable>
           <Pressable
+            onPress={handleToggleList}
             style={({ pressed }) => [
               styles.downloadButton,
               { opacity: pressed ? 0.8 : 1 },
             ]}
           >
-            <Feather name="download" size={20} color={Colors.dark.text} />
+            <Feather
+              name={isBookmarked ? "check" : "plus"}
+              size={20}
+              color={Colors.dark.text}
+            />
             <ThemedText type="body" style={styles.downloadButtonText}>
-              Download
+              {isBookmarked ? "In My List" : "Add to My List"}
             </ThemedText>
           </Pressable>
+        </View>
+
+        <View style={styles.resolutionSection}>
+          <ThemedText type="small" style={styles.resolutionLabel}>
+            Resolution (480p is free)
+          </ThemedText>
+          <View style={styles.resolutionRow}>
+            {RESOLUTION_OPTIONS.map((option) => {
+              const premium = isPremiumResolution(option);
+              const locked = premium && !subscription;
+
+              return (
+                <Pressable
+                  key={option}
+                  onPress={() => setSelectedResolution(option)}
+                  style={({ pressed }) => [
+                    styles.resolutionChip,
+                    selectedResolution === option &&
+                      styles.resolutionChipActive,
+                    pressed && { opacity: 0.8 },
+                  ]}
+                >
+                  <ThemedText
+                    type="small"
+                    style={[
+                      styles.resolutionChipText,
+                      selectedResolution === option &&
+                        styles.resolutionChipTextActive,
+                    ]}
+                  >
+                    {option}
+                    {locked ? " 🔒" : ""}
+                  </ThemedText>
+                </Pressable>
+              );
+            })}
+          </View>
+          {!subscription && (
+            <ThemedText type="small" style={styles.resolutionNote}>
+              Subscribe from Profile &gt; Payment Methods to watch in 720p and
+              above.
+            </ThemedText>
+          )}
         </View>
       </View>
 
@@ -410,6 +499,38 @@ const styles = StyleSheet.create({
   downloadButtonText: {
     color: Colors.dark.text,
     fontWeight: "600",
+  },
+  resolutionSection: {
+    marginTop: Spacing.lg,
+    gap: Spacing.sm,
+  },
+  resolutionLabel: {
+    color: Colors.dark.textSecondary,
+  },
+  resolutionRow: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+  },
+  resolutionChip: {
+    borderWidth: 1,
+    borderColor: Colors.dark.surface,
+    borderRadius: BorderRadius.sm,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xs,
+    backgroundColor: Colors.dark.backgroundSecondary,
+  },
+  resolutionChipActive: {
+    borderColor: Colors.dark.primary,
+    backgroundColor: "rgba(173, 43, 238, 0.2)",
+  },
+  resolutionChipText: {
+    color: Colors.dark.textSecondary,
+  },
+  resolutionChipTextActive: {
+    color: Colors.dark.text,
+  },
+  resolutionNote: {
+    color: Colors.dark.textTertiary,
   },
   trailerSection: {
     marginTop: Spacing.xl,
